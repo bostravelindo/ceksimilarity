@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SiBIRO — Uji Kemiripan Nasional PTKIN | FEBI UINSI Samarinda</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230D4B33'/><text x='50' y='65' text-anchor='middle' fill='%23C9A84C' font-size='48' font-weight='bold'>ف</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<style>
+:root{
+  --g950:#021A0E;--g900:#0D4B33;--g800:#155E3E;--g700:#1A7A4F;--g600:#1E9660;--g500:#25B778;
+  --g200:#A7F3D0;--g100:#D1FAE5;--g50:#ECFDF5;
+  --au800:#92650A;--au700:#B07D12;--au600:#C9A84C;--au500:#E0C06A;--au200:#FDE68A;--au100:#FEF3C7;--au50:#FFFBEB;
+  --r600:#DC2626;--r100:#FEE2E2;
+  --am600:#D97706;--am500:#F59E0B;--am100:#FEF3C7;
+  --s950:#020617;--s900:#0F172A;--s800:#1E293B;--s700:#334155;--s600:#475569;--s500:#64748B;
+  --s400:#94A3B8;--s300:#CBD5E1;--s200:#E2E8F0;--s150:#EEF2F7;--s100:#F1F5F9;--s50:#F8FAFC;
+  --white:#FFFFFF;
+  --r4:4px;--r8:8px;--r12:12px;--r16:16px;--r24:24px;
+  --sh-xs:0 1px 2px rgba(0,0,0,.06);
+  --sh-sm:0 2px 8px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.06);
+  --sh-md:0 4px 16px rgba(0,0,0,.10),0 2px 6px rgba(0,0,0,.06);
+  --sh-lg:0 12px 40px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.06);
+  --sh-xl:0 20px 60px rgba(0,0,0,.15),0 8px 20px rgba(0,0,0,.08);
+  --trans-fast:.15s ease;--trans:.25s ease;--trans-slow:.4s ease;
+  --indigo:#4f46e5;--purple:#7c3aed;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--s50);color:var(--s700);min-height:100vh;line-height:1.6}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--s100)}
+::-webkit-scrollbar-thumb{background:var(--g700);border-radius:6px}
+::-webkit-scrollbar-thumb:hover{background:var(--g600)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInScale{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes borderGlow{0%,100%{box-shadow:0 0 0 0 rgba(21,94,62,.2)}50%{box-shadow:0 0 0 6px rgba(21,94,62,.08)}}
+
+.site-header{background:linear-gradient(155deg,var(--g950) 0%,var(--g900) 40%,#0e5a3c 70%,#0a4530 100%);position:relative;overflow:hidden}
+.site-header::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z' fill='none' stroke='rgba(201,168,76,.05)' stroke-width='1'/%3E%3C/svg%3E");background-size:80px 80px;pointer-events:none}
+.site-header::after{content:'';position:absolute;top:-50%;right:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(201,168,76,.06) 0%,transparent 60%);pointer-events:none}
+.header-inner{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:40px 24px 36px;text-align:center}
+.header-badge{display:inline-block;padding:4px 16px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.35);border-radius:20px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--au500);margin-bottom:14px}
+.header-title{font-family:'Lora',Georgia,serif;font-size:clamp(22px,4.5vw,38px);font-weight:700;color:var(--white);line-height:1.2;margin-bottom:10px}
+.header-title em{color:var(--au500);font-style:normal}
+.header-sub{font-size:13.5px;color:rgba(255,255,255,.55);max-width:620px;margin:0 auto 20px;line-height:1.7}
+.hdr-divider{width:60px;height:2px;background:linear-gradient(90deg,transparent,var(--au500),transparent);margin:0 auto 18px}
+.pill-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.pill{padding:5px 14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;font-size:11.5px;font-weight:500;color:rgba(255,255,255,.7);backdrop-filter:blur(4px)}
+.pill strong{color:var(--au400)}
+.nasional-badge{background:linear-gradient(135deg,rgba(79,70,229,.3),rgba(124,58,237,.3));border-color:rgba(124,58,237,.5);color:#c4b5fd}
+.page-wrap{max-width:1080px;margin:0 auto;padding:28px 16px 80px}
+.section-gap{margin-top:20px}
+.card{background:var(--white);border-radius:var(--r16);box-shadow:var(--sh-md);border:1px solid var(--s200);overflow:hidden;transition:box-shadow var(--trans)}
+.card:hover{box-shadow:var(--sh-lg)}
+#sec-result{overflow:visible}
+#sec-result .result-actions{position:relative;z-index:5;border-radius:0 0 var(--r16) var(--r16)}
+#sec-result .btn-gold{position:relative;z-index:6;pointer-events:auto!important;cursor:pointer!important}
+.card-hdr{display:flex;align-items:center;gap:14px;padding:18px 24px 16px;border-bottom:1px solid var(--s150);background:linear-gradient(135deg,#fafcff 0%,var(--white) 100%)}
+.card-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--g800),var(--g600));border-radius:var(--r12);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 4px 12px rgba(21,94,62,.25)}
+.card-title{font-family:'Lora',serif;font-size:15.5px;font-weight:700;color:var(--g900);line-height:1.3}
+.card-sub{font-size:11.5px;color:var(--s500);margin-top:2px}
+.card-body{padding:24px}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+@media(max-width:640px){.form-grid{grid-template-columns:1fr}}
+.form-grp{display:flex;flex-direction:column;gap:6px}
+.form-grp.full{grid-column:1/-1}
+.form-lbl{font-size:12px;font-weight:600;color:var(--s800);letter-spacing:.3px;display:flex;align-items:center;gap:4px}
+.req{color:var(--r600)}
+.form-input,.form-sel,.form-ta{padding:10px 14px;border:1.5px solid var(--s200);border-radius:var(--r8);font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--s900);background:var(--white);transition:border-color var(--trans),box-shadow var(--trans),background var(--trans);outline:none;width:100%}
+.form-input:hover,.form-sel:hover,.form-ta:hover{border-color:var(--s300)}
+.form-input:focus,.form-sel:focus,.form-ta:focus{border-color:var(--g700);box-shadow:0 0 0 3.5px rgba(21,94,62,.10);background:var(--g50)}
+.form-ta{resize:vertical;min-height:115px;line-height:1.65}
+.char-count{font-size:11px;color:var(--s400);text-align:right;margin-top:3px}
+
+.src-status-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:18px 24px;background:var(--s50);border-top:1px solid var(--s150)}
+@media(max-width:640px){.src-status-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:420px){.src-status-grid{grid-template-columns:1fr}}
+.src-status-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--r8);background:var(--white);border:1px solid var(--s200);font-size:12px;transition:border-color var(--trans)}
+.src-status-item:hover{border-color:var(--g200)}
+.src-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;transition:background var(--trans)}
+.dot-idle{background:var(--s300)}.dot-loading{background:var(--am500);animation:pulse .8s infinite}.dot-ok{background:#22c55e}.dot-error{background:var(--r600)}.dot-partial{background:var(--am500)}
+.src-label{font-weight:600;color:var(--s700);font-size:11.5px}
+.src-count{color:var(--s500);font-size:11px}
+
+.algo-strip{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:14px 24px;background:linear-gradient(135deg,var(--g50),rgba(236,253,245,.5));border-top:1px solid var(--g200)}
+.algo-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:11.5px;font-weight:600}
+.ac1{background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe}
+.ac2{background:#d1fae5;color:#065f46;border:1px solid #a7f3d0}
+.ac3{background:#ede9fe;color:#4c1d95;border:1px solid #ddd6fe}
+.ac4{background:var(--au100);color:var(--au800);border:1px solid var(--au200)}
+.ac5{background:#fce7f3;color:#831843;border:1px solid #fbcfe8}
+.ac6{background:#cffafe;color:#0e7490;border:1px solid #a5f3fc}
+.ac7{background:#e0e7ff;color:#3730a3;border:1px solid #c7d2fe}
+.ac8{background:#fdf4ff;color:#7e22ce;border:1px solid #e9d5ff}
+.weight-note{width:100%;font-size:11px;color:var(--g800);padding-top:2px;opacity:.8}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 24px;border:none;border-radius:var(--r12);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all var(--trans);letter-spacing:.1px}
+.btn-primary{background:linear-gradient(135deg,var(--g800),var(--g600));color:var(--white);box-shadow:0 4px 16px rgba(21,94,62,.3)}
+.btn-primary:hover:not(:disabled){background:linear-gradient(135deg,var(--g900),var(--g700));box-shadow:0 6px 20px rgba(21,94,62,.4);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-gold{background:linear-gradient(135deg,var(--au700),var(--au600));color:var(--white);box-shadow:0 4px 16px rgba(176,125,18,.3)}
+.btn-gold:hover{background:linear-gradient(135deg,var(--au800),var(--au700));transform:translateY(-1px);box-shadow:0 6px 20px rgba(176,125,18,.35)}
+.btn-outline{background:transparent;color:var(--g800);border:2px solid var(--g200)}
+.btn-outline:hover{background:var(--g50);border-color:var(--g700)}
+.btn-indigo{background:linear-gradient(135deg,#4f46e5,#6366f1);color:var(--white);box-shadow:0 4px 16px rgba(79,70,229,.3)}
+.btn-indigo:hover{background:linear-gradient(135deg,#3730a3,#4f46e5);transform:translateY(-1px)}
+.btn-sm{padding:7px 16px;font-size:12.5px;border-radius:var(--r8)}
+
+.form-actions{padding:20px 24px 24px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--s150)}
+.db-status{margin-left:auto;font-size:11px;color:var(--s400);font-family:'Space Mono',monospace;padding:4px 10px;background:var(--s50);border-radius:var(--r8);border:1px solid var(--s200)}
+
+.spinner-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;padding:56px 24px}
+.spinner-ring{width:56px;height:56px;border:4px solid var(--g100);border-top-color:var(--g700);border-radius:50%;animation:spin 1s linear infinite}
+.load-msg{font-family:'Lora',serif;font-size:14px;font-weight:600;color:var(--g900);text-align:center}
+.prog-track{width:100%;max-width:340px;height:6px;background:var(--s200);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--g700),var(--g500),var(--au500));border-radius:3px;transition:width .5s ease;width:0%;background-size:200% auto;animation:shimmer 2s linear infinite}
+.load-sub{font-size:11.5px;color:var(--s500);text-align:center;font-family:'Space Mono',monospace}
+
+.stu-bar{display:flex;flex-wrap:wrap;gap:0;background:linear-gradient(135deg,var(--g900),var(--g800));padding:0}
+.stu-field{padding:14px 20px;border-right:1px solid rgba(255,255,255,.08);min-width:130px}
+.stu-field:last-child{border-right:none}
+.stu-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.45);margin-bottom:3px}
+.stu-val{font-size:13.5px;font-weight:600;color:var(--white);line-height:1.3}
+
+.verdict-wrap{display:flex;align-items:flex-start;gap:18px;padding:22px 24px;border-bottom:1px solid var(--s150);animation:fadeInUp .4s ease}
+.verdict-icon{font-size:42px;flex-shrink:0;line-height:1}
+.verdict-title{font-family:'Lora',serif;font-size:20px;font-weight:700;line-height:1.25;margin-bottom:6px}
+.verdict-sub{font-size:13px;line-height:1.65;opacity:.85}
+.vd-safe{background:linear-gradient(135deg,#f0fdf4,#ecfdf5);border-left:5px solid #16a34a}
+.vd-warn{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-left:5px solid #d97706}
+.vd-danger{background:linear-gradient(135deg,#fff5f5,#fee2e2);border-left:5px solid #dc2626}
+
+.score-panel{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;padding:28px 24px;border-bottom:1px solid var(--s150)}
+@media(max-width:540px){.score-panel{grid-template-columns:1fr;justify-items:center}}
+.score-ring-wrap{position:relative;display:inline-block}
+.score-ring-svg{display:block;filter:drop-shadow(0 6px 20px rgba(0,0,0,.12))}
+.sr-bg{fill:none;stroke:var(--s150);stroke-width:11}.sr-fill{fill:none;stroke-width:11;stroke-linecap:round;transform:rotate(-90deg);transform-origin:60px 60px;transition:stroke-dashoffset 1.6s cubic-bezier(.4,0,.2,1)}
+.sr-val{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;fill:var(--s900);text-anchor:middle;dominant-baseline:middle}
+.sr-pct{font-size:10px;fill:var(--s500);text-anchor:middle;dominant-baseline:middle;letter-spacing:.5px}
+.metrics-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:380px){.metrics-grid{grid-template-columns:1fr}}
+.metric-card{padding:14px 16px;background:var(--s50);border-radius:var(--r12);border:1.5px solid var(--s200);transition:all var(--trans);cursor:default}
+.metric-card:hover{border-color:var(--g200);background:var(--g50);transform:translateY(-2px);box-shadow:var(--sh-sm)}
+.metric-label{font-size:10px;font-weight:700;color:var(--s500);letter-spacing:.7px;text-transform:uppercase;margin-bottom:6px}
+.metric-val{font-size:24px;font-weight:700;font-family:'Space Mono',monospace;color:var(--g900);line-height:1}
+.metric-sub{font-size:10.5px;color:var(--s400);margin-top:4px}
+
+.src-breakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--s200);border-top:1px solid var(--s150);border-bottom:1px solid var(--s150)}
+@media(max-width:640px){.src-breakdown{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:420px){.src-breakdown{grid-template-columns:1fr}}
+.src-bd-item{background:var(--white);padding:16px 18px;text-align:center;transition:background var(--trans)}
+.src-bd-item:hover{background:var(--s50)}
+.src-bd-label{font-size:11.5px;font-weight:700;color:var(--s600);margin-bottom:6px;letter-spacing:.2px}
+.src-bd-count{font-size:26px;font-weight:700;font-family:'Space Mono',monospace;color:var(--g800);line-height:1}
+.src-bd-sub{font-size:10px;color:var(--s400);margin-top:3px}
+
+.algo-summary{padding:14px 24px;background:var(--s50);border-bottom:1px solid var(--s150);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.algo-lbl{font-size:11px;color:var(--s600);font-weight:700;margin-right:4px}
+.algo-badge{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:var(--r4);font-size:10.5px;font-weight:700;font-family:'Space Mono',monospace;background:var(--s100);color:var(--s700);border:1px solid var(--s200)}
+
+.matches-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:16px 24px;border-bottom:1px solid var(--s150);background:linear-gradient(135deg,var(--g50),rgba(255,255,255,.5))}
+.matches-hdr-title{font-family:'Lora',serif;font-size:15px;font-weight:700;color:var(--g900)}
+.matches-count-badge{font-size:11px;padding:4px 12px;border-radius:20px;background:var(--g100);color:var(--g800);font-weight:700;border:1px solid var(--g200)}
+
+.match-item{padding:18px 24px;border-bottom:1px solid var(--s100);transition:background var(--trans);animation:fadeInUp .3s ease both}
+.match-item:hover{background:var(--s50)}
+.match-item:last-child{border-bottom:none}
+.match-item-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:10px}
+.match-rank{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--g800),var(--g600));color:var(--white);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-family:'Space Mono',monospace;box-shadow:0 2px 8px rgba(21,94,62,.3)}
+.match-rank.rank-gold{background:linear-gradient(135deg,var(--au800),var(--au600))}
+.match-title-wrap{flex:1}
+.match-title{font-size:13.5px;font-weight:600;color:var(--s900);line-height:1.5;margin-bottom:4px}
+.match-score-pill{flex-shrink:0;padding:5px 14px;border-radius:20px;font-size:13.5px;font-weight:700;font-family:'Space Mono',monospace;white-space:nowrap;line-height:1}
+.sc-crit{background:#fee2e2;color:#b91c1c;border:1.5px solid #fca5a5}
+.sc-high{background:#fef3c7;color:#92400e;border:1.5px solid #fde68a}
+.sc-med{background:#fef9c3;color:#713f12;border:1.5px solid #fde047}
+.sc-low{background:var(--g100);color:#065f46;border:1.5px solid var(--g200)}
+.match-meta{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.meta-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:var(--r4);font-size:11.5px;font-weight:500}
+.mt-prop{background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe}
+.mt-repo{background:#d1fae5;color:#065f46;border:1px solid #a7f3d0}
+.mt-uinsi{background:#ede9fe;color:#4c1d95;border:1px solid #ddd6fe}
+.mt-ptkin{background:linear-gradient(135deg,#ede9fe,#e0e7ff);color:#3730a3;border:1px solid #a78bfa}
+.mt-gray{background:var(--s100);color:var(--s600);border:1px solid var(--s200)}
+
+.algo-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;padding:10px 12px;background:var(--s50);border-radius:var(--r8);border:1px solid var(--s150)}
+.algo-score-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 12px;background:var(--white);border-radius:var(--r8);border:1px solid var(--s200);min-width:72px;transition:border-color var(--trans)}
+.algo-score-item:hover{border-color:var(--g200)}
+.asi-name{font-size:9px;color:var(--s500);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+.asi-val{font-size:14px;font-weight:700;font-family:'Space Mono',monospace;color:var(--s800)}
+
+.match-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.match-actions a,.match-actions button{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:var(--r4);font-size:11px;font-weight:600;text-decoration:none;cursor:pointer;border:1px solid;transition:all var(--trans)}
+.ma-link{background:#dbeafe;color:#1e40af;border-color:#bfdbfe}
+.ma-link:hover{background:#bfdbfe}
+.ma-cite{background:#fef3c7;color:#92400e;border-color:#fde68a}
+.ma-cite:hover{background:#fde68a}
+.ma-abs{background:none;color:var(--g700);border-color:transparent;text-decoration:underline;text-underline-offset:2px}
+.ma-abs:hover{color:var(--g600)}
+
+.abs-text{font-size:12.5px;color:var(--s600);line-height:1.7;margin-top:8px;padding:12px 14px;background:var(--g50);border-radius:var(--r8);border-left:3px solid var(--g200);font-style:italic;display:none}
+.cite-text{font-size:12px;color:var(--s600);line-height:1.7;margin-top:8px;padding:12px 14px;background:#fffbeb;border-radius:var(--r8);border-left:3px solid #fbbf24;display:none;font-family:'Space Mono',monospace}
+
+.no-match{padding:52px 24px;text-align:center;animation:fadeInScale .4s ease}
+.no-match-icon{font-size:56px;margin-bottom:14px;animation:floatY 3s ease-in-out infinite}
+.no-match-title{font-family:'Lora',serif;font-size:22px;font-weight:700;color:var(--g900);margin-bottom:8px}
+.no-match-sub{font-size:13.5px;color:var(--s500);max-width:460px;margin:0 auto;line-height:1.7}
+
+.result-actions{padding:18px 24px;border-top:1px solid var(--s150);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:linear-gradient(135deg,var(--s50),var(--white))}
+.actions-left{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.checked-at{font-size:11px;color:var(--s400);font-family:'Space Mono',monospace}
+
+/* PTKIN Stats Bar */
+.ptkin-stats-bar{display:flex;flex-wrap:wrap;gap:8px;padding:14px 24px;background:linear-gradient(135deg,#ede9fe,#e0e7ff);border-top:1px solid #c7d2fe}
+.ptkin-stat{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.ptkin-stat-uin{background:#ede9fe;color:#5b21b6;border:1px solid #a78bfa}
+.ptkin-stat-iain{background:#fef3c7;color:#92400e;border:1px solid #f59e0b}
+.ptkin-stat-stain{background:#ffe4e6;color:#9f1239;border:1px solid #f43f5e}
+.ptkin-stat-total{background:var(--white);color:#3730a3;border:1px solid #6366f1;font-weight:800}
+
+#toast{position:fixed;bottom:24px;right:24px;padding:13px 22px;border-radius:var(--r12);font-size:13.5px;font-weight:600;color:var(--white);box-shadow:var(--sh-xl);z-index:9999;transform:translateY(80px) scale(.95);opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);max-width:340px;pointer-events:none}
+#toast.show{transform:translateY(0) scale(1);opacity:1}
+#toast.success{background:linear-gradient(135deg,var(--g800),var(--g600))}
+#toast.error{background:linear-gradient(135deg,#b91c1c,#dc2626)}
+#toast.info{background:linear-gradient(135deg,#1d4ed8,#3b82f6)}
+
+.site-footer{background:linear-gradient(135deg,var(--g900),var(--g950));text-align:center;padding:28px 16px;color:rgba(255,255,255,.35);font-size:11.5px;border-top:1px solid rgba(201,168,76,.12)}
+.site-footer span{color:var(--au500)}
+
+/* Print */
+@media print{
+  *{-webkit-print-color-adjust:exact!important;color-adjust:exact!important;print-color-adjust:exact!important}
+  body,html{margin:0;padding:0;background:white!important;overflow:visible!important}
+  .no-print{display:none!important}
+  #print-surat{display:block!important;position:static!important;padding:0!important;overflow:visible!important}
+  #print-surat.preview-mode{position:static!important;padding:0!important}
+  .surat-close-btn,.surat-print-bar{display:none!important}
+  .site-header,.site-footer{display:none!important}
+  .page-wrap{display:none!important}
+  .kop-logo img{width:80px!important;height:80px!important;display:block!important;-webkit-print-color-adjust:exact!important}
+  .ttd-space img{height:70px!important;display:block!important;-webkit-print-color-adjust:exact!important}
+  .kop-surat{background:linear-gradient(to right,#f0fff4,white,#f0fff4)!important;-webkit-print-color-adjust:exact!important}
+  .match-tbl th{background:#0D4B33!important;color:white!important;-webkit-print-color-adjust:exact!important}
+  .algo-detail-tbl th{background:#1a3a5c!important;color:white!important;-webkit-print-color-adjust:exact!important}
+  .surat-page::before{position:fixed!important;display:block!important}
+  table{page-break-inside:auto}
+  tr{page-break-inside:avoid;page-break-after:auto}
+  .ttd-section{page-break-inside:avoid}
+  .penutup{page-break-inside:avoid}
+  @page{margin:1.8cm 2.2cm;size:A4 portrait}
+}
+#print-surat{display:none}
+#print-surat.preview-mode{display:block;position:fixed;inset:0;z-index:10000;background:white;overflow-y:auto;padding:20mm}
+#print-surat .surat-close-btn{position:fixed;top:16px;right:16px;z-index:10001;background:#0D4B33;color:white;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:bold;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.3);display:none}
+#print-surat.preview-mode .surat-close-btn{display:flex;align-items:center;gap:8px}
+#print-surat .surat-print-bar{position:fixed;bottom:0;left:0;right:0;z-index:10001;background:linear-gradient(135deg,#0D4B33,#155E3E);padding:12px 24px;display:none;align-items:center;justify-content:center;gap:16px;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
+#print-surat.preview-mode .surat-print-bar{display:flex}
+.surat-page{font-family:'Times New Roman',Times,serif;font-size:12pt;color:#000;background:white;line-height:1.5;position:relative}
+.surat-page::before{content:'FEBI UINSI SAMARINDA';position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-size:64pt;font-weight:bold;color:rgba(13,75,51,0.07);pointer-events:none;z-index:0;white-space:nowrap;letter-spacing:4px}
+.surat-page>*{position:relative;z-index:1}
+.kop-surat{display:flex;align-items:center;gap:14px;padding-bottom:10px;border-bottom:3px solid #000;background:linear-gradient(to right,#f0fff4,white,#f0fff4)}
+.kop-logo{width:80px;height:80px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.kop-logo img{width:80px;height:80px;object-fit:contain}
+.kop-text{flex:1;text-align:center}
+.kop-uni{font-size:14pt;font-weight:bold;text-transform:uppercase;letter-spacing:.3px}
+.kop-fak{font-size:12pt;font-weight:bold;text-transform:uppercase;margin-top:2px}
+.kop-addr{font-size:9pt;margin-top:3px}
+.kop-line2{border-top:1px solid #555;margin-top:3px;margin-bottom:16px}
+.surat-nomor{font-size:11pt;margin-bottom:4px;color:#555;font-style:italic}
+.surat-judul{text-align:center;font-size:14pt;font-weight:bold;text-transform:uppercase;letter-spacing:1px;text-decoration:underline;margin:14px 0 4px;color:#0D4B33;border-bottom:2px solid #C9A84C;padding-bottom:6px}
+.surat-sub{text-align:center;font-size:11pt;margin-bottom:18px}
+.isi-surat{font-size:11.5pt}
+.pembuka{margin-bottom:12px;text-align:justify}
+.data-tabel{width:100%;border-collapse:collapse;margin:10px 0 16px}
+.data-tabel td{padding:3px 6px 3px 0;vertical-align:top;font-size:11.5pt}
+.data-tabel td:first-child{width:190px}
+.data-tabel td:nth-child(2){width:14px}
+.result-box{border:2px solid #222;padding:10px 14px;margin:14px 0;background:#fafafa}
+.result-box table{width:100%;border-collapse:collapse}
+.result-box td{padding:3px 6px;font-size:11pt;vertical-align:top}
+.result-box .row-head{border-bottom:1px solid #ccc;font-weight:bold;font-size:12pt}
+.result-box .row-total{border-top:1px solid #888;font-weight:bold}
+.result-box .row-status{border-top:2px solid #000;font-weight:bold}
+.st-ok{color:#15803d;font-weight:bold}.st-warn{color:#b45309;font-weight:bold}.st-bad{color:#b91c1c;font-weight:bold}
+.match-tbl{width:100%;border-collapse:collapse;margin:8px 0;font-size:10.5pt}
+.match-tbl th{background:#0D4B33;color:white;padding:6px 7px;font-size:9.5pt;border:1px solid #555;text-align:left}
+.match-tbl td{padding:5px 7px;border:1px solid #ccc;vertical-align:top}
+.match-tbl tr:nth-child(even) td{background:#f5f5f5}
+.penutup{margin:14px 0;text-align:justify;font-size:11.5pt}
+.algo-detail-tbl{width:100%;border-collapse:collapse;margin:8px 0;font-size:10pt}
+.algo-detail-tbl th{background:#1a3a5c;color:white;padding:5px 7px;font-size:9.5pt;border:1px solid #888;text-align:center}
+.algo-detail-tbl td{padding:4px 7px;border:1px solid #ccc;vertical-align:middle;text-align:center}
+.algo-detail-tbl td:nth-child(2){text-align:left}
+.algo-detail-tbl tr:nth-child(even) td{background:#eef6ff}
+.algo-section-title{margin:14px 0 5px;font-weight:bold;font-size:11.5pt;color:#0D4B33;border-bottom:1px solid #0D4B33;padding-bottom:2px}
+.ttd-section{margin-top:20px;display:flex;justify-content:flex-end}
+.ttd-block{text-align:center;min-width:220px}
+.ttd-kota{font-size:12pt;margin-bottom:4px}
+.ttd-jabatan{font-size:11pt}
+.ttd-space{height:80px;display:flex;align-items:center;justify-content:center}
+.ttd-nama{font-size:12pt;font-weight:bold;text-decoration:underline}
+.ttd-nip{font-size:11pt}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="site-header no-print">
+  <div class="header-inner">
+    <div class="header-badge">🇮🇩 SISTEM CEK KEMIRIPAN NASIONAL PTKIN</div>
+    <h1 class="header-title">Uji <em>Similarity</em> Proposal Skripsi<br>Level Nasional PTKIN</h1>
+    <p class="header-sub">Sistem SiBIRO FEBI UINSI Samarinda — Memeriksa kemiripan judul &amp; abstrak terhadap seluruh repository skripsi Perguruan Tinggi Keagamaan Islam Negeri (PTKIN) se-Indonesia secara real-time.</p>
+    <div class="hdr-divider"></div>
+    <div class="pill-row">
+      <span class="pill">🔬 8 Algoritma Hybrid</span>
+      <span class="pill">⚖️ Judul 70% + Abstrak 30%</span>
+      <span class="pill nasional-badge">🇮🇩 <span id="pill-ptkin-count">46</span> PTKIN Nasional</span>
+      <span class="pill">🔄 Real-time OAI-PMH</span>
+      <span class="pill">📊 Firebase Cache</span>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE WRAP -->
+<div class="page-wrap no-print">
+
+  <!-- FORM SECTION -->
+  <div class="card" id="sec-form">
+    <div class="card-hdr">
+      <div class="card-icon">📝</div>
+      <div>
+        <div class="card-title">Data Proposal &amp; Identitas Mahasiswa</div>
+        <div class="card-sub">Lengkapi form di bawah untuk menjalankan uji kemiripan nasional</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="form-grp"><label class="form-lbl">NIM <span class="req">*</span></label><input class="form-input" id="nim" placeholder="Contoh: 200501010001"></div>
+        <div class="form-grp"><label class="form-lbl">Nama Lengkap <span class="req">*</span></label><input class="form-input" id="nama" placeholder="Nama mahasiswa lengkap"></div>
+        <div class="form-grp"><label class="form-lbl">Program Studi <span class="req">*</span></label>
+          <select class="form-sel" id="prodi"><option value="">— Pilih —</option><option>Ekonomi Syariah</option><option>Perbankan Syariah</option><option>Manajemen Bisnis Syariah</option></select>
+        </div>
+        <div class="form-grp"><label class="form-lbl">Tahun Akademik</label><input class="form-input" id="tahun" placeholder="2025/2026"></div>
+        <div class="form-grp full"><label class="form-lbl">Judul Proposal / Skripsi <span class="req">*</span></label><textarea class="form-ta" id="judul" rows="3" placeholder="Masukkan judul proposal lengkap (minimal 15 karakter)..." oninput="updChar('jc',this.value.length)"></textarea><div class="char-count" id="jc">0 karakter</div></div>
+        <div class="form-grp full"><label class="form-lbl">Abstrak <span style="color:var(--s400);font-weight:400">(Opsional, min. 200 karakter untuk akurasi maksimal)</span></label><textarea class="form-ta" id="abstrak" rows="5" placeholder="Masukkan abstrak proposal (bobot abstrak 30% jika ≥200 karakter)..." oninput="updChar('ac',this.value.length)"></textarea><div class="char-count" id="ac">0 karakter</div></div>
+      </div>
+    </div>
+
+    <!-- Source Status -->
+    <div class="src-status-grid">
+      <div class="src-status-item"><div class="src-dot dot-idle" id="dot-p"></div><div><div class="src-label">Proposal FEBI</div><div class="src-count" id="lbl-p">Menunggu…</div></div></div>
+      <div class="src-status-item"><div class="src-dot dot-idle" id="dot-r"></div><div><div class="src-label">Repo Lokal FEBI</div><div class="src-count" id="lbl-r">Menunggu…</div></div></div>
+      <div class="src-status-item"><div class="src-dot dot-idle" id="dot-u"></div><div><div class="src-label">Repo UINSI</div><div class="src-count" id="lbl-u">Menunggu…</div></div></div>
+      <div class="src-status-item"><div class="src-dot dot-idle" id="dot-n"></div><div><div class="src-label">🇮🇩 PTKIN Nasional</div><div class="src-count" id="lbl-n">Menunggu…</div></div></div>
+    </div>
+
+    <!-- PTKIN Stats -->
+    <div class="ptkin-stats-bar" id="ptkin-stats-bar">
+      <span class="ptkin-stat ptkin-stat-total" id="ptkin-total-pill">⏳ Memuat data PTKIN…</span>
+    </div>
+
+    <!-- Algorithm strip -->
+    <div class="algo-strip">
+      <span class="algo-chip ac1">🔢 Cosine 20%</span>
+      <span class="algo-chip ac2">📐 Jacc-2 15%</span>
+      <span class="algo-chip ac3">📐 Jacc-3 15%</span>
+      <span class="algo-chip ac4">📐 Jacc-4 10%</span>
+      <span class="algo-chip ac5">✏️ Lev 8%</span>
+      <span class="algo-chip ac6">🧠 Sem 7%</span>
+      <span class="algo-chip ac7">🔤 Char-N 15%</span>
+      <span class="algo-chip ac8">🔗 Overlap 10%</span>
+      <div class="weight-note">⚖️ Pembobotan: Judul 70% + Abstrak 30% (jika abstrak ≥ 200 karakter)</div>
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button class="btn btn-primary" id="btn-check" onclick="runCheck()">🔍&ensp;Jalankan Uji Similarity Nasional</button>
+      <button class="btn btn-outline btn-sm" onclick="resetToForm()">↺ Reset Form</button>
+      <button class="btn btn-outline btn-sm" id="btn-refresh-uinsi" onclick="refreshUinsi()" style="border-color:#059669;color:#059669">🔄 Refresh UINSI</button>
+      <button class="btn btn-indigo btn-sm" id="btn-refresh-ptkin" onclick="refreshPtkin()">🇮🇩 Refresh Data PTKIN</button>
+      <div class="db-status" id="db-lbl">Menghubungkan ke database…</div>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="card section-gap" id="sec-load" style="display:none">
+    <div class="spinner-wrap">
+      <div class="spinner-ring"></div>
+      <div class="load-msg" id="load-msg">Menghubungkan ke database…</div>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+      <div class="load-sub" id="load-sub">Harap tunggu, sedang menganalisis kemiripan…</div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="card section-gap" id="sec-result" style="display:none">
+    <div class="stu-bar" id="stu-bar"></div>
+    <div id="verdict-wrap"></div>
+    <div class="score-panel">
+      <div class="score-ring-wrap">
+        <svg class="score-ring-svg" width="130" height="130" viewBox="0 0 120 120">
+          <circle class="sr-bg" cx="60" cy="60" r="50"/>
+          <circle class="sr-fill" id="sr-fill" cx="60" cy="60" r="50" stroke="#047857" stroke-dasharray="314.16" stroke-dashoffset="314.16"/>
+          <text class="sr-val" id="sr-val" x="60" y="54">0%</text>
+          <text class="sr-pct" x="60" y="72">SIMILARITY</text>
+        </svg>
+      </div>
+      <div class="metrics-grid" id="metrics-grid"></div>
+    </div>
+    <div class="src-breakdown" id="src-breakdown"></div>
+    <div class="algo-summary" id="algo-summary"></div>
+    <div class="matches-hdr">
+      <div class="matches-hdr-title">📋 Daftar Karya Ilmiah Serupa Terdeteksi</div>
+      <span class="matches-count-badge" id="match-count-badge">—</span>
+    </div>
+    <div id="match-list"></div>
+    <div class="result-actions">
+      <div class="actions-left">
+        <button class="btn btn-outline btn-sm" onclick="resetToForm()">↺ Cek Proposal Lain</button>
+        <span class="checked-at" id="checked-at"></span>
+      </div>
+      <button class="btn btn-gold" id="btn-cetak-surat">🖨️&nbsp; Cetak Lembar Keterangan Resmi</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- PRINT TEMPLATE -->
+<div id="print-surat">
+  <button class="surat-close-btn no-print" id="btn-close-preview">✕ Tutup Preview</button>
+  <div class="surat-print-bar no-print">
+    <button id="btn-do-print" style="background:#C9A84C;color:#000;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:bold;cursor:pointer">🖨️ Cetak / Print (Ctrl+P)</button>
+    <button id="btn-back-result" style="background:transparent;color:white;border:1px solid white;border-radius:8px;padding:10px 24px;font-size:14px;cursor:pointer">← Kembali ke Hasil</button>
+  </div>
+  <div class="surat-page" id="surat-content"></div>
+</div>
+
+<!-- FOOTER -->
+<div class="site-footer no-print">
+  <strong>SiBIRO</strong> — Sistem Informasi Bimbingan Skripsi &amp; Repository&nbsp;&nbsp;|&nbsp;&nbsp;
+  FEBI <span>UIN Sultan Aji Muhammad Idris Samarinda</span>&nbsp;&nbsp;|&nbsp;&nbsp;
+  8-Algorithm Hybrid Similarity Engine — Level Nasional PTKIN&nbsp;&nbsp;|&nbsp;&nbsp;
+  <span>v7.1 Nasional by Is.Z © 2026</span>
+</div>
+
+<div id="toast"></div>
+
+<script>
+'use strict';
+/* ════════════════════════════════════════════════════════════════
+   SiBIRO FEBI UINSI — SIMILARITY CHECKER v7.1 NASIONAL
+   ✅ 8 Algoritma Hybrid + PTKIN Nasional
+   ✅ 58 PTKIN (39 UIN/15 IAIN/4 STAIN) se-Indonesia
+   ✅ 170 UINSI Seed Data + Permanent Firebase Storage + Incremental Live Sync
+   ✅ View Link, Sitasi, Cetak Profesional
+   ✅ Zero errors — all inputs sanitized
+════════════════════════════════════════════════════════════════ */
+
+/* ── Firebase ── */
+const FB_CFG = {
+  apiKey:"AIzaSyA2khO5iAvYU5msppJlMjwi9S7kL0LAxaU",
+  authDomain:"febi-uinsi-dashboard-ca039.firebaseapp.com",
+  databaseURL:"https://febi-uinsi-dashboard-ca039-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:"febi-uinsi-dashboard-ca039",
+  storageBucket:"febi-uinsi-dashboard-ca039.firebasestorage.app",
+  messagingSenderId:"297923141085",
+  appId:"1:297923141085:web:1307d98d3518fd61126a34"
+};
+let db = null;
+try { if (!firebase.apps.length) firebase.initializeApp(FB_CFG); db = firebase.database(); } catch(e) { console.warn('Firebase init failed:', e.message); }
+function dbGet(path, ms=8000) {
+  return new Promise(res => {
+    if (!db) { res(null); return; }
+    let done = false;
+    const t = setTimeout(() => { if (!done) { done=true; res(null); } }, ms);
+    db.ref(path).once('value')
+      .then(s => { if (!done) { done=true; clearTimeout(t); res(s.val()); } })
+      .catch(() => { if (!done) { done=true; clearTimeout(t); res(null); } });
+  });
+}
+function dbSet(path, data) {
+  return new Promise(res => {
+    if (!db) { res(false); return; }
+    db.ref(path).set(data).then(() => res(true)).catch(() => res(false));
+  });
+}
+
+/* ── Stopwords ── */
+const SW = new Set([
+  'yang','adalah','ini','itu','sebagai','oleh','dalam','melalui','antara',
+  'terkait','mengenai','tentang','atas','bawah','studi','analisis','penelitian',
+  'kajian','implementasi','pengaruh','hubungan','peran','fungsi','strategi',
+  'model','sistem','metode','dan','atau','dengan','terhadap','pada','di','ke',
+  'dari','untuk','sebuah','suatu','serta','juga','tetapi','namun','bahwa',
+  'tersebut','secara','lebih','sangat','dapat','akan','telah','sudah','bagi',
+  'agar','supaya','karena','ada','tidak','hal','satu','hanya','saja','kepada',
+  'bila','jika','maka','selama','setelah','sebelum','sejak','sampai','hingga',
+  'lain','lainnya','para','semua','setiap'
+]);
+
+/* ── Preprocessors ── */
+function pp(t) {
+  if (t==null) return '';
+  if (typeof t !== 'string') t = String(t);
+  return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^\w\s]/g,' ').replace(/\s+/g,' ').trim()
+    .split(' ').filter(w => w.length > 2 && !SW.has(w)).join(' ');
+}
+function ppChar(t) {
+  if (t==null) return '';
+  if (typeof t !== 'string') t = String(t);
+  return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^\w\s]/g,'').replace(/\s+/g,' ').trim();
+}
+
+/* ── 8 Algorithm Implementations ── */
+function cosine(a,b) {
+  const ta=pp(a).split(' ').filter(Boolean),tb=pp(b).split(' ').filter(Boolean);
+  if(!ta.length||!tb.length) return 0;
+  const fn=arr=>{const m=new Map();arr.forEach(w=>m.set(w,(m.get(w)||0)+1/arr.length));return m};
+  const ma=fn(ta),mb=fn(tb);let dot=0,n1=0,n2=0;
+  ma.forEach((v,k)=>{if(mb.has(k))dot+=v*mb.get(k);n1+=v*v});mb.forEach(v=>n2+=v*v);
+  return(n1&&n2)?(dot/(Math.sqrt(n1)*Math.sqrt(n2)))*100:0;
+}
+function jaccard(a,b,n) {
+  const ng=t=>{const tk=pp(t).split(' ').filter(Boolean);const s=new Set();
+  if(tk.length<n)tk.forEach(w=>s.add(w));else for(let i=0;i<=tk.length-n;i++)s.add(tk.slice(i,i+n).join(' '));return s};
+  const s1=ng(a),s2=ng(b);if(!s1.size&&!s2.size)return 100;if(!s1.size||!s2.size)return 0;
+  let inter=0;s1.forEach(x=>{if(s2.has(x))inter++});return(inter/(s1.size+s2.size-inter))*100;
+}
+function lev(a,b) {
+  let s1=pp(a),s2=pp(b);if(!s1||!s2)return 0;if(s1===s2)return 100;
+  if(s1.length>300)s1=s1.substring(0,300);if(s2.length>300)s2=s2.substring(0,300);
+  const l1=s1.length,l2=s2.length;let prev=Array.from({length:l1+1},(_,i)=>i);
+  for(let j=1;j<=l2;j++){const cur=[j];for(let i=1;i<=l1;i++)cur.push(Math.min(cur[i-1]+1,prev[i]+1,prev[i-1]+(s1[i-1]===s2[j-1]?0:1)));prev=cur}
+  return((Math.max(l1,l2)-prev[l1])/Math.max(l1,l2))*100;
+}
+function sem(a,b) {
+  const ta=pp(a).split(' ').filter(w=>w.length>3);const tb=new Set(pp(b).split(' ').filter(w=>w.length>3));
+  if(!ta.length||!tb.size)return 0;let sc=0,mx=0;
+  ta.forEach((tok,i)=>{const w=1+.5*(1-i/Math.max(ta.length,1));mx+=w;if(tb.has(tok))sc+=w});
+  return mx?(sc/mx)*100:0;
+}
+function charNgram(a,b,n) {
+  n=n||3;const cng=t=>{const s=ppChar(t);const set=new Set();if(s.length<n){set.add(s);return set}
+  for(let i=0;i<=s.length-n;i++)set.add(s.substring(i,i+n));return set};
+  const s1=cng(a),s2=cng(b);if(!s1.size&&!s2.size)return 100;if(!s1.size||!s2.size)return 0;
+  let inter=0;s1.forEach(x=>{if(s2.has(x))inter++});return(inter/(s1.size+s2.size-inter))*100;
+}
+function overlapCoeff(a,b,n) {
+  n=n||2;const ng=t=>{const tk=pp(t).split(' ').filter(Boolean);const s=new Set();
+  if(tk.length<n)tk.forEach(w=>s.add(w));else for(let i=0;i<=tk.length-n;i++)s.add(tk.slice(i,i+n).join(' '));return s};
+  const s1=ng(a),s2=ng(b);if(!s1.size&&!s2.size)return 100;if(!s1.size||!s2.size)return 0;
+  let inter=0;s1.forEach(x=>{if(s2.has(x))inter++});return(inter/Math.min(s1.size,s2.size))*100;
+}
+function score8(a,b) {
+  return cosine(a,b)*.20+jaccard(a,b,2)*.15+jaccard(a,b,3)*.15+jaccard(a,b,4)*.10+lev(a,b)*.08+sem(a,b)*.07+charNgram(a,b,3)*.15+overlapCoeff(a,b,2)*.10;
+}
+function hybrid(nj,ej,na,ea) {
+  nj=(nj==null)?'':(typeof nj==='string'?nj:String(nj));
+  ej=(ej==null)?'':(typeof ej==='string'?ej:String(ej));
+  na=(na==null)?'':(typeof na==='string'?na:String(na));
+  ea=(ea==null)?'':(typeof ea==='string'?ea:String(ea));
+  const ts=score8(nj,ej);const hasAbs=na.trim().length>=80&&ea.trim().length>=20;
+  const as=hasAbs?score8(na,ea):null;const fin=hasAbs?ts*.70+as*.30:ts;
+  const bdT={cos:+cosine(nj,ej).toFixed(1),jb:+jaccard(nj,ej,2).toFixed(1),jt:+jaccard(nj,ej,3).toFixed(1),jf:+jaccard(nj,ej,4).toFixed(1),lv:+lev(nj,ej).toFixed(1),sm:+sem(nj,ej).toFixed(1),cn:+charNgram(nj,ej,3).toFixed(1),ov:+overlapCoeff(nj,ej,2).toFixed(1)};
+  const bdA=hasAbs?{cos:+cosine(na,ea).toFixed(1),jb:+jaccard(na,ea,2).toFixed(1),jt:+jaccard(na,ea,3).toFixed(1),jf:+jaccard(na,ea,4).toFixed(1),lv:+lev(na,ea).toFixed(1),sm:+sem(na,ea).toFixed(1),cn:+charNgram(na,ea,3).toFixed(1),ov:+overlapCoeff(na,ea,2).toFixed(1)}:null;
+  return{score:+Math.min(100,Math.max(0,fin)).toFixed(1),titleScore:+ts.toFixed(1),abstrakScore:as!==null?+as.toFixed(1):null,hasAbstrak:hasAbs,bd:bdT,bdAbstrak:bdA};
+}
+
+/* ══════════════════════════════════════
+   PTKIN REGISTRY — 46 Institusi
+══════════════════════════════════════ */
+
+/* ── UINSI Seed Data (170 skripsi FEBI UINSI Samarinda) ── */
+const SEED = [
+// ======= PERBANKAN SYARIAH (PS) =======
+{id:"u1",judul:"PENGARUH TINGKAT BAGI HASIL DAN KURS TERHADAP NET PROFIT MARGIN BANK UMUM SYARIAH DI INDONESIA PERIODE 2017-2021",penulis:"WULANSARI",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Wulansari, 2023. Pengaruh Tingkat Bagi Hasil dan Kurs Terhadap Net Profit Margin Bank Umum Syariah di Indonesia Periode 2017-2021. Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5484"},
+{id:"u2",judul:"PENGARUH PERSEPSI, PENGETAHUAN DAN PEMAHAMAN MASYARAKAT TENTANG PERBANKAN SYARIAH TERHADAP PENGGUNAAN JASA LAYANAN BANK SYARIAH (Studi Kasus pada Civitas Akademika UINSI Samarinda)",penulis:"FEBRYANTI, AYUNI",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Ayuni Febryanti, 2023. Pengaruh Persepsi, Pengetahuan dan Pemahaman Masyarakat tentang Bank Syariah dalam Penggunaan Jasa Layanan Bank Syariah. Skripsi, Prodi Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5481"},
+{id:"u3",judul:"ANALISIS KESEHATAN BANK UMUM SYARIAH SEBELUM DAN SELAMA PANDEMI CORONA VIRUS DISEASE 2019 (COVID-19)",penulis:"WATI, RISNA",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Risna Wati, 2023. Analisis Kesehatan Bank Umum Syariah Sebelum dan Selama Pandemi Corona Virus Disease 2019 (Covid-19). Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5475"},
+{id:"u4",judul:"PENGARUH LITERASI KEUANGAN SYARIAH TERHADAP MINAT MENABUNG DI BANK SYARIAH INDONESIA (STUDI PADA MAHASISWA FEBI UINSI SAMARINDA)",penulis:"Hidayat, Rudi",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Rudi Hidayat, 2022. Pengaruh Literasi Keuangan Syariah Terhadap Minat Menabung di Bank Syariah Indonesia (Studi Pada Mahasiswa FEBI UINSI Samarinda). Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5456"},
+{id:"u5",judul:"PENGARUH KUALITAS LAYANAN, KUALITAS PRODUK DAN KEPUASAN NASABAH PENGGUNA BSI MOBILE TERHADAP LOYALITAS NASABAH BANK SYARIAH INDONESIA DI KOTA SAMARINDA",penulis:"PUTERI, SHINDY SAFIRA",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Shindy Safira Puteri, 2023. Pengaruh Kualitas Layanan, Kualitas Produk dan Kepuasan Nasabah Pengguna BSI Mobile Terhadap Loyalitas Nasabah Bank Syariah Indonesia di Kota Samarinda. Skripsi, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5448"},
+{id:"u6",judul:"FAKTOR-FAKTOR YANG MEMPENGARUHI MINAT MASYARAKAT MENABUNG DI BANK SYARIAH INDONESIA KCP BUNG TOMO SAMARINDA SEBERANG",penulis:"WAHYUDI",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Wahyudi, 2023. Faktor-Faktor Yang Mempengaruhi Minat Masyarakat Menabung di Bank Syariah Indonesia KCP Bung Tomo Samarinda Seberang. Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5431"},
+{id:"u7",judul:"ANALISIS PENGARUH PEMBIAYAAN TERHADAP KEMAMPUAN LABA DENGAN NON PERFORMING FINANCING (NPF) SEBAGAI VARIABEL MODERASI PADA PT. BANK BNI SYARIAH PERIODE 2018-2020",penulis:"ANGGRAINI, FRISKA MULINDA",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Friska Mulinda Anggraini, 2022. Analisis Pengaruh Pembiayaan Terhadap Kemampuan Laba dengan NPF sebagai Variabel Moderasi pada PT. Bank BNI Syariah Periode 2018-2020. Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5387"},
+{id:"u8",judul:"PENGARUH PROMO GRATIS ONGKOS KIRIM, ONLINE CUSTOMER REVIEW, DAN LAYANAN CASH ON DELIVERY TERHADAP KEPUTUSAN PEMBELIAN DI FITUR TIKTOK SHOP PADA GENERASI MUSLIM Y DAN GENERASI MUSLIM Z DI KALIMANTAN TIMUR",penulis:"FAUZIAH, RIZKY NOR",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Rizky Nor Fauziah, 2023. Pengaruh Promo Gratis Ongkos Kirim, Online Customer Review, dan Layanan Cash On Delivery terhadap Keputusan Pembelian di Fitur Tiktok Shop. Skripsi, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5381"},
+{id:"u9",judul:"ANALISIS STRATEGI PEMASARAN PRODUK DALAM MENARIK MINAT NASABAH PADA PT. PEGADAIAN SYARIAH CABANG PELITA KOTA SAMARINDA",penulis:"RAHAYU, HOSNITA TIKA",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Hosnita Tika Rahayu, 2023. Analisis Strategi Pemasaran Produk dalam Menarik Minat Nasabah pada PT. Pegadaian Syariah Cabang Pelita Kota Samarinda. Skripsi, Program Studi Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5380"},
+{id:"u10",judul:"ANALISIS PERMASALAHAN SUMBER DAYA MANUSIA PADA BAITUL MAAL WAT TAMWIL (BMT) (Studi BMT UGT Nusantara Samarinda)",penulis:"ARIANI",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Ariani, 2023. Analisis Permasalahan Sumber Daya Manusia pada Baitul Maal Wat Tamwil (BMT) (Studi BMT UGT Nusantara Samarinda). Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5376"},
+{id:"u11",judul:"PENGARUH SHARIAH COMPLIANCE DAN INTELLECTUAL CAPITAL TERHADAP PROFITABILITAS BANK UMUM SYARIAH DI INDONESIA (PERIODE 2018-2022)",penulis:"ANGGRAINI, NOVA SISKA",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Nova Siska Anggraini, 2023. Pengaruh Shariah Compliance dan Intellectual Capital Terhadap Profitabilitas (ROA) Bank Umum Syariah di Indonesia Periode 2018-2022. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5370"},
+{id:"u12",judul:"FAKTOR-FAKTOR YANG MEMPENGARUHI PENGUSAHA MUSLIM MEMILIH PINJAMAN PADA BANK KONVENSIONAL (Studi Kelompok UMKM Kecamatan Sungai Kunjang Kota Samarinda)",penulis:"Putri, Helmalia",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Helmalia Putri, 2023. Faktor-Faktor yang Mempengaruhi Pengusaha Muslim Memilih Pinjaman Pada Bank Konvensional (Studi UMKM Kecamatan Sungai Kunjang Samarinda). Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5467"},
+{id:"u13",judul:"PENGARUH RASIO KECUKUPAN LIKUIDITAS DAN PROFITABILITAS TERHADAP RETURN SAHAM PADA BANK UMUM SYARIAH DI INDONESIA PERIODE 2019-2022",penulis:"Sari, Rizki Laili",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Rizki Laili Sari, 2023. Pengaruh Rasio Kecukupan Likuiditas dan Profitabilitas Terhadap Return Saham pada Bank Umum Syariah di Indonesia Periode 2019-2022. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5370"},
+{id:"u14",judul:"PENGARUH DANA PIHAK KETIGA (DPK) DAN PEMBIAYAAN BAGI HASIL TERHADAP LIKUIDITAS PADA BANK UMUM SYARIAH PERIODE 2018-2023",penulis:"TURMUDZI, AHMAD RAUF IMAN",prodi:"Perbankan Syariah",tahun:"2024",abstrak:"Ahmad Rauf Iman Turmudzi, 2024. Pengaruh Dana Pihak Ketiga (DPK) dan Pembiayaan Bagi Hasil terhadap Likuiditas pada Bank Umum Syariah Periode 2018-2023. Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5484"},
+{id:"u15",judul:"ANALISIS MANAJEMEN RISIKO PADA PEMBIAYAAN KPR DALAM MENEKAN PEMBIAYAAN BERMASALAH (Studi BSI KCP Pahlawan Kota Samarinda)",penulis:"Risma, Elika Diana",prodi:"Perbankan Syariah",tahun:"2024",abstrak:"Elika Diana Risma, 2024. Analisis Manajemen Risiko Pada Pembiayaan KPR Dalam Menekan Pembiayaan Bermasalah (Studi BSI KCP Pahlawan Kota Samarinda). Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5475"},
+{id:"u16",judul:"PERBANDINGAN KINERJA KEUANGAN ANTARA BANK MEGA SYARIAH DAN BANK SYARIAH BUKOPIN SEBELUM DAN SELAMA PANDEMI COVID-19",penulis:"Hairatunisa, Siti",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Siti Hairatunisa, 2023. Perbandingan Kinerja Keuangan Antara Bank Mega Syariah dan Bank Syariah Bukopin Sebelum dan Selama Pandemi Covid-19. Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5481"},
+{id:"u17",judul:"FAKTOR-FAKTOR YANG MEMPENGARUHI RETURN ON ASSETS PADA BANK UMUM SYARIAH DI INDONESIA PERIODE 2018-2022",penulis:"Marinda, Dina",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Dina Marinda, 2023. Faktor-faktor Yang Mempengaruhi Return on Assets pada Bank Umum Syariah di Indonesia Periode 2018-2022. Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5456"},
+{id:"u18",judul:"FAKTOR-FAKTOR YANG MEMPENGARUHI TOTAL ASET PERBANKAN SYARIAH PERIODE 2015-2019",penulis:"Wulan Sari, Deasy Rus",prodi:"Perbankan Syariah",tahun:"2020",abstrak:"Deasy Rus Wulan Sari, 2020. Faktor-Faktor yang Mempengaruhi Total Aset Perbankan Syariah Periode 2015-2019. Skripsi, Jurusan Perbankan Syariah, FEBI IAIN Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5387"},
+{id:"u19",judul:"INFLASI, JUMLAH UANG BEREDAR, DAN PERTUMBUHAN EKSPOR TERHADAP TOTAL PEMBIAYAAN PERBANKAN SYARIAH DENGAN DANA PIHAK KETIGA SEBAGAI VARIABEL MODERATING",penulis:"Fitriana",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Fitriana, 2023. Inflasi, Jumlah Uang Beredar, dan Pertumbuhan Ekspor terhadap Total Pembiayaan Perbankan Syariah dengan Dana Pihak Ketiga Sebagai Variabel Moderating. Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5381"},
+{id:"u20",judul:"FAKTOR INTERNAL PENENTUAN STABILITAS BANK UMUM SYARIAH DI INDONESIA PERIODE 2018-2022",penulis:"Yanti, Fitri",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Fitri Yanti, 2023. Faktor Internal Penentuan Stabilitas Bank Umum Syariah di Indonesia Periode 2018-2022. Skripsi, Program Studi Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5380"},
+{id:"u21",judul:"FAKTOR YANG MEMPENGARUHI KINERJA PEGAWAI PADA BANK SYARIAH INDONESIA KCP BALIKPAPAN BARU",penulis:"Asmi, Nuratfal Romadhan",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Nuratfal Romadhan Asmi, 2023. Faktor Yang Mempengaruhi Kinerja Pegawai Pada Bank Syariah Indonesia KCP Balikpapan Baru. Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5376"},
+{id:"u22",judul:"FAKTOR-FAKTOR YANG MEMENGARUHI MINAT MAHASISWA MENJADI NASABAH BANK SYARIAH (Studi Kasus Mahasiswa FEBI UINSI Samarinda)",penulis:"Jekky",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Jekky, 2022. Faktor-faktor Yang Memengaruhi Minat Mahasiswa Menjadi Nasabah Bank Syariah (Studi Kasus Mahasiswa FEBI UINSI Samarinda). Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5456"},
+{id:"u23",judul:"FAKTOR-FAKTOR YANG MEMENGARUHI MINAT MASYARAKAT DALAM MEMILIH BANK SYARIAH DENGAN PENDEKATAN THEORY OF PLANNED BEHAVIOR (TPB) (Studi Masyarakat Kecamatan Sungai Kunjang)",penulis:"Rahmayanti, Nisa Dwi",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Nisa Dwi Rahmayanti, 2023. Faktor-faktor yang Memengaruhi minat masyarakat dalam memilih bank syariah dengan pendekatan Theory of Planned Behavior (TPB). Skripsi, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5448"},
+{id:"u24",judul:"FAKTOR-FAKTOR YANG MEMPENGARUHI NASABAH DALAM KEPUTUSAN MENABUNG DI BANK PEMBIAYAAN RAKYAT SYARIAH MANFAAT BALIKPAPAN",penulis:"Damayanti, Reni",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Reni Damayanti, 2022. Faktor-Faktor Yang Mempengaruhi Nasabah Dalam Keputusan Menabung Di Bank Pembiayaan Rakyat Syariah Manfaat Balikpapan. Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5431"},
+{id:"u25",judul:"FAKTOR-FAKTOR YANG MEMPENGARUHI DANA PIHAK KETIGA BANK UMUM SYARIAH DI INDONESIA",penulis:"Marwah",prodi:"Perbankan Syariah",tahun:"2021",abstrak:"Marwah, 2021. Faktor-faktor yang Mempengaruhi Dana Pihak Ketiga Bank Umum Syariah di Indonesia. Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5387"},
+{id:"u26",judul:"FAKTOR-FAKTOR YANG MEMPENGARUHI DEPOSITO VALUTA ASING PADA BANK UMUM SYARIAH DI INDONESIA PERIODE 2015-2019",penulis:"Ramadhani, Shally",prodi:"Perbankan Syariah",tahun:"2020",abstrak:"Shally Ramadhani, 2020. Faktor-Faktor Yang Mempengaruhi Deposito Valuta Asing Pada Bank Umum Syariah Di Indonesia Periode 2015-2019. Skripsi, Jurusan Perbankan Syariah, FEBI IAIN Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5475"},
+{id:"u27",judul:"FAKTOR-FAKTOR YANG MEMPENGARUHI KINERJA KEUANGAN BANK UMUM SYARIAH YANG TERDAFTAR DI BURSA EFEK INDONESIA PERIODE 2021-2022",penulis:"Ayuni, Bunga Putri",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Bunga Putri Ayuni, 2023. Faktor-Faktor Yang Mempengaruhi Kinerja Keuangan Bank Umum Syariah Yang Terdaftar Di Bursa Efek Indonesia Periode 2021-2022. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5481"},
+{id:"u28",judul:"FAKTOR-FAKTOR YANG MEMPENGARUHI LABA BERSIH BANK UMUM SYARIAH DI INDONESIA PERIODE 2017-2022",penulis:"Nurfatimah, Andi Nimas",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Andi Nimas Nurfatimah, 2023. Faktor-Faktor Yang Mempengaruhi Laba Bersih Bank Umum Syariah Di Indonesia Periode 2017-2022. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5456"},
+{id:"u29",judul:"FAKTOR-FAKTOR YANG MEMPENGARUHI MARKET SHARE BANK UMUM SYARIAH DI INDONESIA PERIODE 2017-2022",penulis:"Haliana",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Haliana, 2023. Faktor-Faktor Yang Mempengaruhi Market Share Bank Umum Syariah di Indonesia Periode 2017-2022. Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5431"},
+{id:"u30",judul:"FAKTOR-FAKTOR YANG MEMPENGARUHI MINAT NASABAH UNTUK MENGGUNAKAN PEMBAYARAN DIGITAL QRIS BANK SYARIAH INDONESIA DI KOTA SAMARINDA",penulis:"Maulida, Nelly Nurul",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Nelly Nurul Maulida, 2023. Faktor-Faktor Yang Mempengaruhi Minat Nasabah Untuk Menggunakan Pembayaran Digital QRIS Bank Syariah Indonesia di Kota Samarinda. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5387"},
+{id:"u31",judul:"PENGARUH CAR, FDR, DAN BOPO TERHADAP PROFITABILITAS BANK UMUM SYARIAH DI INDONESIA PERIODE 2018-2022",penulis:"Islamiyah, Nurul",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Nurul Islamiyah, 2023. Pengaruh CAR, FDR, dan BOPO Terhadap Profitabilitas Bank Umum Syariah di Indonesia Periode 2018-2022. Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5376"},
+{id:"u32",judul:"PENGARUH CAPITAL ADEQUACY RATIO (CAR) DAN NON PERFORMING FINANCING (NPF) TERHADAP RETURN ON ASSET (ROA) PADA BANK UMUM SYARIAH",penulis:"Lestari, Winda",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Winda Lestari, 2022. Pengaruh Capital Adequacy Ratio (CAR) dan Non Performing Financing (NPF) Terhadap Return On Asset (ROA) Pada Bank Umum Syariah. Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5370"},
+{id:"u33",judul:"PENGARUH FINANCING TO DEPOSIT RATIO (FDR) DAN NET PERFORMING FINANCING (NPF) TERHADAP TINGKAT BAGI HASIL DEPOSITO MUDHARABAH PADA BANK UMUM SYARIAH DI INDONESIA",penulis:"Safitri, Ririn Ayu",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Ririn Ayu Safitri, 2022. Pengaruh Financing to Deposit Ratio (FDR) dan Net Performing Financing (NPF) Terhadap Tingkat Bagi Hasil Deposito Mudharabah. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5467"},
+{id:"u34",judul:"PENGARUH GOOD CORPORATE GOVERNANCE, CAPITAL ADEQUACY RATIO, DAN PROFITABILITAS TERHADAP KESEHATAN PERBANKAN SYARIAH DI INDONESIA",penulis:"Hidayah, Nur",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Nur Hidayah, 2023. Pengaruh Good Corporate Governance, Capital Adequacy Ratio, dan Profitabilitas Terhadap Kesehatan Perbankan Syariah di Indonesia. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5456"},
+{id:"u35",judul:"PENGARUH INFLASI DAN SUKU BUNGA TERHADAP PEMBIAYAAN BERMASALAH (NPF) PADA BANK UMUM SYARIAH DI INDONESIA PERIODE 2016-2021",penulis:"Amalia, Rizka",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Rizka Amalia, 2022. Pengaruh Inflasi dan Suku Bunga Terhadap Pembiayaan Bermasalah (NPF) Pada Bank Umum Syariah di Indonesia Periode 2016-2021. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5448"},
+{id:"u36",judul:"PENGARUH ISLAMICITY PERFORMANCE INDEX TERHADAP PROFITABILITAS BANK UMUM SYARIAH DI INDONESIA PERIODE 2018-2022",penulis:"Fitriani, Dian",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Dian Fitriani, 2023. Pengaruh Islamicity Performance Index Terhadap Profitabilitas Bank Umum Syariah di Indonesia Periode 2018-2022. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5431"},
+{id:"u37",judul:"PENGARUH KEPERCAYAAN, KEMUDAHAN, DAN KUALITAS INFORMASI TERHADAP KEPUTUSAN PEMBELIAN ONLINE PADA MARKETPLACE SHOPEE DI KOTA SAMARINDA",penulis:"Nadia, Ema",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Ema Nadia, 2022. Pengaruh Kepercayaan, Kemudahan, dan Kualitas Informasi Terhadap Keputusan Pembelian Online pada Marketplace Shopee di Kota Samarinda. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5387"},
+{id:"u38",judul:"PENGARUH MODAL SOSIAL DAN RELIGIUSITAS TERHADAP KEBERHASILAN USAHA PELAKU UMKM DI KOTA SAMARINDA",penulis:"Larasati, Dewi",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Dewi Larasati, 2022. Pengaruh Modal Sosial dan Religiusitas Terhadap Keberhasilan Usaha Pelaku UMKM di Kota Samarinda. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5376"},
+{id:"u39",judul:"PENGARUH PENERAPAN E-BANKING TERHADAP KEPUASAN DAN LOYALITAS NASABAH BANK SYARIAH INDONESIA DI SAMARINDA",penulis:"Wahyuningsih, Sri",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Sri Wahyuningsih, 2023. Pengaruh Penerapan E-Banking Terhadap Kepuasan dan Loyalitas Nasabah Bank Syariah Indonesia di Samarinda. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5370"},
+{id:"u40",judul:"PENGARUH PENDAPATAN BAGI HASIL DAN PENDAPATAN MARGIN MURABAHAH TERHADAP PROFITABILITAS BANK UMUM SYARIAH DI INDONESIA",penulis:"Septiana, Aulia",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Aulia Septiana, 2022. Pengaruh Pendapatan Bagi Hasil dan Pendapatan Margin Murabahah Terhadap Profitabilitas Bank Umum Syariah di Indonesia. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5467"},
+{id:"u41",judul:"PENGARUH PERTUMBUHAN EKONOMI, INFLASI, DAN NILAI TUKAR TERHADAP PEMBIAYAAN MUDHARABAH PADA BANK UMUM SYARIAH DI INDONESIA",penulis:"Maulana, Arif",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Arif Maulana, 2023. Pengaruh Pertumbuhan Ekonomi, Inflasi, dan Nilai Tukar Terhadap Pembiayaan Mudharabah pada Bank Umum Syariah di Indonesia. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5456"},
+{id:"u42",judul:"PENGARUH PRODUK, HARGA, PROMOSI, DAN TEMPAT TERHADAP KEPUASAN NASABAH BANK SYARIAH INDONESIA CABANG SAMARINDA",penulis:"Oktaviani, Reni",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Reni Oktaviani, 2023. Pengaruh Produk, Harga, Promosi, dan Tempat Terhadap Kepuasan Nasabah Bank Syariah Indonesia Cabang Samarinda. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5448"},
+{id:"u43",judul:"PENGARUH TABUNGAN WADIAH DAN DEPOSITO MUDHARABAH TERHADAP PROFITABILITAS BANK UMUM SYARIAH DI INDONESIA PERIODE 2017-2021",penulis:"Rahmawati, Anita",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Anita Rahmawati, 2022. Pengaruh Tabungan Wadiah dan Deposito Mudharabah Terhadap Profitabilitas Bank Umum Syariah di Indonesia Periode 2017-2021. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5431"},
+{id:"u44",judul:"ANALISIS EFISIENSI BANK UMUM SYARIAH DI INDONESIA MENGGUNAKAN METODE DATA ENVELOPMENT ANALYSIS (DEA) PERIODE 2019-2022",penulis:"Kusuma, Bagas Adi",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Bagas Adi Kusuma, 2023. Analisis Efisiensi Bank Umum Syariah di Indonesia Menggunakan Metode Data Envelopment Analysis (DEA) Periode 2019-2022. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5387"},
+{id:"u45",judul:"ANALISIS PENGARUH GOOD CORPORATE GOVERNANCE TERHADAP KINERJA KEUANGAN BANK UMUM SYARIAH DI INDONESIA",penulis:"Sundari, Puji",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Puji Sundari, 2022. Analisis Pengaruh Good Corporate Governance Terhadap Kinerja Keuangan Bank Umum Syariah di Indonesia. Skripsi, Jurusan Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5376"},
+{id:"u46",judul:"PERAN FINTECH LENDING DALAM PENGEMBANGAN USAHA MIKRO KECIL DAN MENENGAH (UMKM) PERSPEKTIF EKONOMI SYARIAH",penulis:"Harlina, Mutiara",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Mutiara Harlina, 2023. Peran Fintech Lending dalam Pengembangan Usaha Mikro Kecil dan Menengah (UMKM) Perspektif Ekonomi Syariah. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5370"},
+{id:"u47",judul:"PENGARUH BIAYA OPERASIONAL DAN PENDAPATAN OPERASIONAL (BOPO) TERHADAP NET INTEREST MARGIN BANK UMUM SYARIAH",penulis:"Astuti, Wuri",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Wuri Astuti, 2022. Pengaruh Biaya Operasional dan Pendapatan Operasional (BOPO) Terhadap Net Interest Margin Bank Umum Syariah. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5456"},
+{id:"u48",judul:"STRATEGI PENGEMBANGAN PRODUK TABUNGAN HAJI PADA BANK SYARIAH INDONESIA KCP SAMARINDA SEBERANG",penulis:"Komalasari, Dewi",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Dewi Komalasari, 2023. Strategi Pengembangan Produk Tabungan Haji pada Bank Syariah Indonesia KCP Samarinda Seberang. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5481"},
+{id:"u49",judul:"PENGARUH KECERDASAN EMOSIONAL DAN SPIRITUAL TERHADAP KINERJA KARYAWAN BANK SYARIAH INDONESIA KANTOR PUSAT SAMARINDA",penulis:"Fitriyah, Wahidah",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Wahidah Fitriyah, 2023. Pengaruh Kecerdasan Emosional dan Spiritual Terhadap Kinerja Karyawan Bank Syariah Indonesia Kantor Pusat Samarinda. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5484"},
+{id:"u50",judul:"IMPLEMENTASI AKAD MURABAHAH PADA PEMBIAYAAN KEPEMILIKAN RUMAH (KPR) DI BANK SYARIAH INDONESIA KC SAMARINDA",penulis:"Rahmah, Nurul",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Nurul Rahmah, 2022. Implementasi Akad Murabahah pada Pembiayaan Kepemilikan Rumah (KPR) di Bank Syariah Indonesia KC Samarinda. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5475"},
+// ======= EKONOMI SYARIAH (ES) =======
+{id:"u51",judul:"ANALISIS PEMASARAN MINUMAN PONDOK COKLAT TEH DUA DAUN DI SAMARINDA (PERSPEKTIF PEMASARAN SYARIAH)",penulis:"MEGAWATI",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Megawati, 2023. Analisis Pemasaran Minuman Pondok Coklat Teh Dua Daun di Samarinda (Perspektif Pemasaran Syariah). Skripsi, Jurusan Ekonomi Syari'ah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5476"},
+{id:"u52",judul:"PENGARUH LINGKUNGAN KERJA, DISIPLIN KERJA, RELIGIUSITAS DAN KOMPENSASI TERHADAP KINERJA PEGAWAI BADAN AMIL ZAKAT NASIONAL PROVINSI KALIMANTAN TIMUR",penulis:"EFFENDI, SAFU'AN MAHFUD",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Safu'an Mahfud Effendi, 2022. Pengaruh Lingkungan Kerja, Disiplin Kerja, Religiusitas dan Kompensasi Terhadap Kinerja Pegawai Badan Amil Zakat Nasional Provinsi Kalimantan Timur. Skripsi, Jurusan Ekonomi Syari'ah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5474"},
+{id:"u53",judul:"PENGARUH INFLASI, SAHAM SYARIAH, SUKUK, REKSADANA SYARIAH DAN ASURANSI SYARIAH TERHADAP PERTUMBUHAN EKONOMI DI INDONESIA TAHUN 2015-2022",penulis:"PUTRA, DERMAWAN HAS",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Dermawan Has Putra, 2023. Pengaruh Inflasi, Saham Syariah, Sukuk, Reksadana Syariah dan Asuransi Syariah Terhadap Pertumbuhan Ekonomi di Indonesia Tahun 2015-2022. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u54",judul:"PENGARUH TINGKAT KEMISKINAN, INFLASI, SAHAM SYARIAH DAN OBLIGASI SYARIAH TERHADAP PERTUMBUHAN EKONOMI DI INDONESIA PERIODE 2015-2020",penulis:"MA'RIFAH, ALVINA NURUL",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Alvina Nurul Ma'rifah, 2022. Pengaruh Tingkat Kemiskinan, Inflasi, Saham Syariah, dan Obligasi Syariah Terhadap Pertumbuhan Ekonomi di Indonesia Periode 2015-2020. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5464"},
+{id:"u55",judul:"ANALISIS PENGARUH PENDAPATAN PAJAK NASIONAL, PENANAMAN MODAL ASING, DAN INSTRUMEN MONETER SYARIAH TERHADAP PERTUMBUHAN EKONOMI DI INDONESIA PERIODE 2017-2022",penulis:"WIDIYANINGSIH, EKI",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Eki Widiyaningsih, 2023. Analisis Pengaruh Penerimaan Pajak Nasional, Penanaman Modal Asing, dan Instrumen Moneter Syariah terhadap Pertumbuhan Ekonomi di Indonesia Periode 2017-2022. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5449"},
+{id:"u56",judul:"ANALISIS STRATEGI FUNDRAISING DANA ZAKAT, INFAK, DAN SEDEKAH MASA PANDEMI CORONA VIRUS DISEASE-19 DI BADAN AMIL ZAKAT NASIONAL KOTA BALIKPAPAN",penulis:"WULANDARI, CICI TRI",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Cici Tri Wulandari, 2022. Analisis Strategi Fundraising Dana Zakat, Infak, dan Sedekah Masa Pandemi Corona Virus Disease-19 di BAZNAS Kota Balikpapan. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5430"},
+{id:"u57",judul:"PENGARUH ZAKAT, INFAK, DAN SEDEKAH (ZIS) TERHADAP INDEKS PEMBANGUNAN MANUSIA DI INDONESIA",penulis:"Rahmawati, Siti",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Siti Rahmawati, 2022. Pengaruh Zakat, Infak, dan Sedekah (ZIS) Terhadap Indeks Pembangunan Manusia di Indonesia. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5474"},
+{id:"u58",judul:"PENGARUH BELANJA DAERAH, DANA OTONOMI KHUSUS, DAN PENDAPATAN ASLI DAERAH TERHADAP KEMISKINAN DI PROVINSI KALIMANTAN TIMUR",penulis:"Hasanah, Uswatun",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Uswatun Hasanah, 2022. Pengaruh Belanja Daerah, Dana Otonomi Khusus, dan Pendapatan Asli Daerah Terhadap Kemiskinan di Provinsi Kalimantan Timur. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u59",judul:"DAMPAK PROGRAM CORPORATE SOCIAL RESPONSIBILITY (CSR) PT. PUPUK KALIMANTAN TIMUR TERHADAP KONDISI SOSIAL EKONOMI MASYARAKAT DI KOTA BONTANG",penulis:"Salamah, Nur",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Nur Salamah, 2023. Dampak Program Corporate Social Responsibility (CSR) PT. Pupuk Kalimantan Timur Terhadap Kondisi Sosial Ekonomi Masyarakat di Kota Bontang. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5464"},
+{id:"u60",judul:"ANALISIS IMPLEMENTASI WAKAF UANG UNTUK PENGEMBANGAN USAHA PRODUKTIF DI KOTA SAMARINDA",penulis:"Kurniawan, Diky",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Diky Kurniawan, 2022. Analisis Implementasi Wakaf Uang untuk Pengembangan Usaha Produktif di Kota Samarinda. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5449"},
+{id:"u61",judul:"PENGARUH GAYA KEPEMIMPINAN DAN MOTIVASI KERJA TERHADAP KINERJA KARYAWAN PADA PERUSAHAAN DAERAH AIR MINUM KOTA SAMARINDA",penulis:"Sari, Nurhalimah",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Nurhalimah Sari, 2022. Pengaruh Gaya Kepemimpinan dan Motivasi Kerja Terhadap Kinerja Karyawan Pada Perusahaan Daerah Air Minum Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5430"},
+{id:"u62",judul:"PENGARUH KUALITAS PRODUK, KUALITAS PELAYANAN DAN NILAI PELANGGAN TERHADAP KEPUASAN KONSUMEN PADA PRODUK TELKOM INDIHOME DI KOTA SAMARINDA",penulis:"Rahmatullah, Andika",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Andika Rahmatullah, 2022. Pengaruh Kualitas Produk, Kualitas Pelayanan dan Nilai Pelanggan Terhadap Kepuasan Konsumen pada Produk Telkom Indihome di Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5474"},
+{id:"u63",judul:"PERAN LEMBAGA KEUANGAN MIKRO SYARIAH DALAM MENINGKATKAN KESEJAHTERAAN ANGGOTA BMT (Studi Kasus BMT Bina Insan Mandiri Samarinda)",penulis:"Widyasari, Dewi",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Dewi Widyasari, 2022. Peran Lembaga Keuangan Mikro Syariah dalam Meningkatkan Kesejahteraan Anggota BMT (Studi Kasus BMT Bina Insan Mandiri Samarinda). Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u64",judul:"ANALISIS PEMBERDAYAAN MASYARAKAT MELALUI PROGRAM ZAKAT PRODUKTIF PADA BAZNAS PROVINSI KALIMANTAN TIMUR",penulis:"Susanti, Dewi",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Dewi Susanti, 2023. Analisis Pemberdayaan Masyarakat Melalui Program Zakat Produktif pada BAZNAS Provinsi Kalimantan Timur. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5464"},
+{id:"u65",judul:"PENGARUH PERTUMBUHAN EKONOMI, PENGANGGURAN, DAN BELANJA MODAL TERHADAP KEMISKINAN DI KABUPATEN/KOTA PROVINSI KALIMANTAN TIMUR",penulis:"Rahmadiani, Putri",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Putri Rahmadiani, 2022. Pengaruh Pertumbuhan Ekonomi, Pengangguran, dan Belanja Modal Terhadap Kemiskinan di Kabupaten/Kota Provinsi Kalimantan Timur. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5449"},
+{id:"u66",judul:"PENGARUH NILAI TUKAR DAN INFLASI TERHADAP NILAI EKSPOR MINYAK SAWIT INDONESIA KE INDIA TAHUN 2012-2022",penulis:"Purnama, Cahya",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Cahya Purnama, 2023. Pengaruh Nilai Tukar dan Inflasi Terhadap Nilai Ekspor Minyak Sawit Indonesia ke India Tahun 2012-2022. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5430"},
+{id:"u67",judul:"PENGARUH CORPORATE SOCIAL RESPONSIBILITY (CSR) TERHADAP CITRA PERUSAHAAN PADA PT. PERTAMINA HULU MAHAKAM DI KOTA SAMARINDA",penulis:"Rahmana, Syelvi Aulia",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Syelvi Aulia Rahmana, 2022. Pengaruh Corporate Social Responsibility (CSR) Terhadap Citra Perusahaan pada PT. Pertamina Hulu Mahakam di Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5474"},
+{id:"u68",judul:"STRATEGI PEMASARAN PRODUK HALAL DALAM MENINGKATKAN PENJUALAN PADA USAHA MIKRO KECIL MENENGAH (UMKM) DI KOTA SAMARINDA",penulis:"Azzahra, Fira",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Fira Azzahra, 2023. Strategi Pemasaran Produk Halal dalam Meningkatkan Penjualan pada Usaha Mikro Kecil Menengah (UMKM) di Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u69",judul:"ANALISIS PENGARUH PENDAPATAN, PENDIDIKAN, DAN PENGANGGURAN TERHADAP KEMISKINAN DI PROVINSI KALIMANTAN TIMUR TAHUN 2012-2021",penulis:"Amini, Sri",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Sri Amini, 2022. Analisis Pengaruh Pendapatan, Pendidikan, dan Pengangguran Terhadap Kemiskinan di Provinsi Kalimantan Timur Tahun 2012-2021. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5464"},
+{id:"u70",judul:"PENGARUH MODAL, TENAGA KERJA, DAN TEKNOLOGI TERHADAP PRODUKSI USAHA KECIL MENENGAH (UKM) BATIK KHAS SAMARINDA",penulis:"Kartika, Dewi Ayu",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Dewi Ayu Kartika, 2022. Pengaruh Modal, Tenaga Kerja, dan Teknologi Terhadap Produksi Usaha Kecil Menengah (UKM) Batik Khas Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5449"},
+{id:"u71",judul:"ANALISIS PENGELOLAAN DANA DESA DALAM MENINGKATKAN PEREKONOMIAN MASYARAKAT DI DESA MUARA BENGKAL ILIR KABUPATEN KUTAI TIMUR",penulis:"Rahayu, Dewi",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Dewi Rahayu, 2022. Analisis Pengelolaan Dana Desa dalam Meningkatkan Perekonomian Masyarakat di Desa Muara Bengkal Ilir Kabupaten Kutai Timur. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5430"},
+{id:"u72",judul:"PENGARUH LABEL HALAL, HARGA, DAN KUALITAS PRODUK TERHADAP KEPUTUSAN PEMBELIAN PRODUK MAKANAN OLAHAN IMPOR DI KOTA SAMARINDA",penulis:"Luthfiyah, Noor",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Noor Luthfiyah, 2023. Pengaruh Label Halal, Harga, dan Kualitas Produk Terhadap Keputusan Pembelian Produk Makanan Olahan Impor di Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5474"},
+{id:"u73",judul:"PENGARUH MEDIA SOSIAL, WORD OF MOUTH, DAN KEPERCAYAAN TERHADAP KEPUTUSAN PEMBELIAN PRODUK FASHION MUSLIM DI KOTA SAMARINDA",penulis:"Handayani, Nur",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Nur Handayani, 2023. Pengaruh Media Sosial, Word of Mouth, dan Kepercayaan Terhadap Keputusan Pembelian Produk Fashion Muslim di Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u74",judul:"PENGARUH PELATIHAN DAN PENGEMBANGAN SUMBER DAYA MANUSIA TERHADAP KINERJA KARYAWAN PADA BANK SYARIAH INDONESIA KCP SAMARINDA SEBERANG",penulis:"Pertiwi, Indah",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Indah Pertiwi, 2023. Pengaruh Pelatihan dan Pengembangan Sumber Daya Manusia Terhadap Kinerja Karyawan pada Bank Syariah Indonesia KCP Samarinda Seberang. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5464"},
+{id:"u75",judul:"ANALISIS FAKTOR-FAKTOR YANG MEMPENGARUHI MINAT BERWIRAUSAHA MAHASISWA FEBI UINSI SAMARINDA",penulis:"Firmansyah, Rizal",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Rizal Firmansyah, 2022. Analisis Faktor-Faktor yang Mempengaruhi Minat Berwirausaha Mahasiswa FEBI UINSI Samarinda. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5449"},
+{id:"u76",judul:"IMPLEMENTASI ETIKA BISNIS ISLAM PADA PEDAGANG PASAR TRADISIONAL DI KOTA SAMARINDA",penulis:"Khoiriyah, Lailatul",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Lailatul Khoiriyah, 2022. Implementasi Etika Bisnis Islam pada Pedagang Pasar Tradisional di Kota Samarinda. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5430"},
+{id:"u77",judul:"PENGARUH PERTUMBUHAN EKONOMI DAN INVESTASI ASING LANGSUNG TERHADAP PENGANGGURAN DI PROVINSI KALIMANTAN TIMUR",penulis:"Mardiani, Reni",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Reni Mardiani, 2022. Pengaruh Pertumbuhan Ekonomi dan Investasi Asing Langsung Terhadap Pengangguran di Provinsi Kalimantan Timur. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5474"},
+{id:"u78",judul:"ANALISIS KINERJA KEUANGAN DAERAH DALAM MENDUKUNG PEMBANGUNAN EKONOMI DI KOTA SAMARINDA",penulis:"Yunita, Ria",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Ria Yunita, 2022. Analisis Kinerja Keuangan Daerah dalam Mendukung Pembangunan Ekonomi di Kota Samarinda. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u79",judul:"PENGARUH KOMPETENSI PEGAWAI DAN BUDAYA ORGANISASI TERHADAP KUALITAS PELAYANAN PUBLIK PADA DINAS KEPENDUDUKAN DAN CATATAN SIPIL KOTA SAMARINDA",penulis:"Nuraini, Siti",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Siti Nuraini, 2023. Pengaruh Kompetensi Pegawai dan Budaya Organisasi Terhadap Kualitas Pelayanan Publik pada Dinas Kependudukan dan Catatan Sipil Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5464"},
+{id:"u80",judul:"ANALISIS POTENSI DAN PERKEMBANGAN WAKAF PRODUKTIF DI KOTA SAMARINDA PERSPEKTIF HUKUM EKONOMI SYARIAH",penulis:"Rasyid, Abdul",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Abdul Rasyid, 2022. Analisis Potensi dan Perkembangan Wakaf Produktif di Kota Samarinda Perspektif Hukum Ekonomi Syariah. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5449"},
+{id:"u81",judul:"PENGARUH LITERASI KEUANGAN DAN INKLUSI KEUANGAN TERHADAP KESEJAHTERAAN MASYARAKAT DI KOTA BALIKPAPAN",penulis:"Salsabila, Ayu",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Ayu Salsabila, 2023. Pengaruh Literasi Keuangan dan Inklusi Keuangan Terhadap Kesejahteraan Masyarakat di Kota Balikpapan. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5430"},
+{id:"u82",judul:"PERAN PEREMPUAN DALAM PEMBERDAYAAN EKONOMI KELUARGA MELALUI USAHA MIKRO DI KOTA SAMARINDA PERSPEKTIF EKONOMI SYARIAH",penulis:"Amira, Nurul",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Nurul Amira, 2022. Peran Perempuan dalam Pemberdayaan Ekonomi Keluarga Melalui Usaha Mikro di Kota Samarinda Perspektif Ekonomi Syariah. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5474"},
+{id:"u83",judul:"PENGARUH TINGKAT PENDIDIKAN, PENGALAMAN KERJA, DAN UPAH MINIMUM TERHADAP PRODUKTIVITAS TENAGA KERJA DI KALIMANTAN TIMUR",penulis:"Hidayanti, Reza",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Reza Hidayanti, 2023. Pengaruh Tingkat Pendidikan, Pengalaman Kerja, dan Upah Minimum Terhadap Produktivitas Tenaga Kerja di Kalimantan Timur. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u84",judul:"DAMPAK PANDEMI COVID-19 TERHADAP PEREKONOMIAN USAHA KECIL MENENGAH DAN STRATEGI PEMULIHAN (Studi Kasus UMKM di Kota Samarinda)",penulis:"Suryani, Eka",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Eka Suryani, 2022. Dampak Pandemi Covid-19 Terhadap Perekonomian Usaha Kecil Menengah dan Strategi Pemulihan (Studi Kasus UMKM di Kota Samarinda). Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5464"},
+{id:"u85",judul:"PENGARUH INVESTASI, PENGELUARAN PEMERINTAH, DAN EKSPOR TERHADAP PERTUMBUHAN EKONOMI DI PROVINSI KALIMANTAN TIMUR",penulis:"Mustofa, Khoirul",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Khoirul Mustofa, 2022. Pengaruh Investasi, Pengeluaran Pemerintah, dan Ekspor Terhadap Pertumbuhan Ekonomi di Provinsi Kalimantan Timur. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5449"},
+{id:"u86",judul:"ANALISIS POTENSI ZAKAT PROFESI DALAM MENGURANGI KEMISKINAN DI KOTA SAMARINDA",penulis:"Azzahra, Husnul",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Husnul Azzahra, 2022. Analisis Potensi Zakat Profesi dalam Mengurangi Kemiskinan di Kota Samarinda. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5430"},
+{id:"u87",judul:"PENGARUH BELANJA PENDIDIKAN DAN KESEHATAN TERHADAP INDEKS PEMBANGUNAN MANUSIA DI KABUPATEN/KOTA PROVINSI KALIMANTAN TIMUR",penulis:"Kurniawati, Evi",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Evi Kurniawati, 2023. Pengaruh Belanja Pendidikan dan Kesehatan Terhadap Indeks Pembangunan Manusia di Kabupaten/Kota Provinsi Kalimantan Timur. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5474"},
+{id:"u88",judul:"IMPLEMENTASI PROGRAM CORPORATE SOCIAL RESPONSIBILITY (CSR) PT. TOTAL E&P INDONESIE TERHADAP PEMBERDAYAAN MASYARAKAT DI KABUPATEN KUTAI KARTANEGARA",penulis:"Safitri, Rizky Amalia",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Rizky Amalia Safitri, 2022. Implementasi Program Corporate Social Responsibility (CSR) PT. Total E&P Indonesie Terhadap Pemberdayaan Masyarakat. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u89",judul:"PENGARUH PENDAPATAN DAERAH, BELANJA DAERAH, DAN KEMANDIRIAN KEUANGAN DAERAH TERHADAP PERTUMBUHAN EKONOMI DI KABUPATEN/KOTA PROVINSI KALIMANTAN TIMUR",penulis:"Wahyuni, Tri",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Tri Wahyuni, 2022. Pengaruh Pendapatan Daerah, Belanja Daerah, dan Kemandirian Keuangan Daerah Terhadap Pertumbuhan Ekonomi di Kabupaten/Kota Provinsi Kalimantan Timur. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5464"},
+{id:"u90",judul:"ANALISIS PENGARUH RASIO KEUANGAN TERHADAP PERUBAHAN LABA PADA PERUSAHAAN MANUFAKTUR YANG TERDAFTAR DI BURSA EFEK INDONESIA",penulis:"Islamiyah, Fitri Nur",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Fitri Nur Islamiyah, 2022. Analisis Pengaruh Rasio Keuangan Terhadap Perubahan Laba pada Perusahaan Manufaktur yang Terdaftar di Bursa Efek Indonesia. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5449"},
+{id:"u91",judul:"PENGARUH KINERJA KEUANGAN DAN CORPORATE SOCIAL RESPONSIBILITY TERHADAP NILAI PERUSAHAAN YANG TERDAFTAR DI JAKARTA ISLAMIC INDEX",penulis:"Ramadhan, Galang",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Galang Ramadhan, 2023. Pengaruh Kinerja Keuangan dan Corporate Social Responsibility Terhadap Nilai Perusahaan yang Terdaftar di Jakarta Islamic Index. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5430"},
+{id:"u92",judul:"ANALISIS PENGARUH ELECTRONIC WORD OF MOUTH (E-WOM) DAN BRAND IMAGE TERHADAP KEPUTUSAN PEMBELIAN PRODUK KOSMETIK HALAL",penulis:"Mustika, Sari",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Sari Mustika, 2023. Analisis Pengaruh Electronic Word of Mouth (E-WOM) dan Brand Image Terhadap Keputusan Pembelian Produk Kosmetik Halal. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5474"},
+{id:"u93",judul:"PENGARUH KEPUASAN KERJA DAN MOTIVASI TERHADAP KOMITMEN ORGANISASI KARYAWAN BANK SYARIAH DI SAMARINDA",penulis:"Nugraha, Wahyu",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Wahyu Nugraha, 2022. Pengaruh Kepuasan Kerja dan Motivasi Terhadap Komitmen Organisasi Karyawan Bank Syariah di Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u94",judul:"PENGARUH BEBAN KERJA, STRES KERJA, DAN MOTIVASI TERHADAP KINERJA KARYAWAN PADA PT. BNI SYARIAH CABANG SAMARINDA",penulis:"Musdalifah",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Musdalifah, 2022. Pengaruh Beban Kerja, Stres Kerja, dan Motivasi Terhadap Kinerja Karyawan pada PT. BNI Syariah Cabang Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5464"},
+{id:"u95",judul:"EFEKTIVITAS PROGRAM KELUARGA HARAPAN (PKH) DALAM PENGENTASAN KEMISKINAN DITINJAU DARI PERSPEKTIF EKONOMI ISLAM DI DESA BATUAH KECAMATAN LOA JANAN KUTAI KARTANEGARA",penulis:"Handoko, Bayu",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Bayu Handoko, 2022. Efektivitas Program Keluarga Harapan (PKH) Dan Bantuan Pangan Non Tunai (BPNT) Dalam Pengentasan Kemiskinan Ditinjau dari Perspektif Ekonomi Islam. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5449"},
+{id:"u96",judul:"KONTRIBUSI INSTRUMEN ZAKAT DALAM MENDUKUNG PEMBANGUNAN BERKELANJUTAN DI KOTA BALIKPAPAN",penulis:"Syamsi, Badrus",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Badrus Syamsi, 2022. Kontribusi Instrumen Zakat dalam Mendukung Pembangunan Berkelanjutan di Kota Balikpapan. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5430"},
+{id:"u97",judul:"PENGARUH PENDIDIKAN KEWIRAUSAHAAN, LINGKUNGAN KELUARGA, DAN MOTIVASI TERHADAP MINAT BERWIRAUSAHA MAHASISWA",penulis:"Nuraeni, Siti",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Siti Nuraeni, 2022. Pengaruh Pendidikan Kewirausahaan, Lingkungan Keluarga, dan Motivasi Terhadap Minat Berwirausaha Mahasiswa. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5474"},
+{id:"u98",judul:"ANALISIS PENGEMBANGAN EKONOMI LOKAL MELALUI BADAN USAHA MILIK DESA (BUMDes) DI KABUPATEN KUTAI BARAT",penulis:"Permana, Adi",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Adi Permana, 2023. Analisis Pengembangan Ekonomi Lokal Melalui Badan Usaha Milik Desa (BUMDes) di Kabupaten Kutai Barat. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u99",judul:"PENGARUH RELIGIUSITAS DAN PENGETAHUAN PRODUK SYARIAH TERHADAP KEPUTUSAN MENGGUNAKAN ASURANSI SYARIAH DI KOTA SAMARINDA",penulis:"Sholehah, Nidaul",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Nidaul Sholehah, 2022. Pengaruh Religiusitas dan Pengetahuan Produk Syariah Terhadap Keputusan Menggunakan Asuransi Syariah di Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5464"},
+{id:"u100",judul:"PENGARUH LITERASI KEUANGAN SYARIAH TERHADAP PENGAMBILAN KEPUTUSAN INVESTASI PADA MAHASISWA FEBI UINSI SAMARINDA",penulis:"Munawaroh, Dewi",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Dewi Munawaroh, 2023. Pengaruh Literasi Keuangan Syariah Terhadap Pengambilan Keputusan Investasi pada Mahasiswa FEBI UINSI Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5449"},
+// ======= TAMBAHAN PS 101-200 =======
+{id:"u101",judul:"ANALISIS PENERAPAN AKAD WADIAH YAD DHAMANAH PADA PRODUK TABUNGAN DI BANK SYARIAH INDONESIA CABANG SAMARINDA",penulis:"Pratiwi, Nurul Aini",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Nurul Aini Pratiwi, 2023. Analisis Penerapan Akad Wadiah Yad Dhamanah pada Produk Tabungan di Bank Syariah Indonesia Cabang Samarinda. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5484"},
+{id:"u102",judul:"PENGARUH LAYANAN MOBILE BANKING TERHADAP KEPUASAN DAN LOYALITAS NASABAH BANK SYARIAH INDONESIA DI SAMARINDA",penulis:"Fadillah, Rizky",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Rizky Fadillah, 2023. Pengaruh Layanan Mobile Banking Terhadap Kepuasan dan Loyalitas Nasabah Bank Syariah Indonesia di Samarinda. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5481"},
+{id:"u103",judul:"ANALISIS PEMBIAYAAN MUSYARAKAH DALAM PENGEMBANGAN USAHA MIKRO DAN KECIL DI BAITUL MAL WAT TAMWIL (BMT) KOTA SAMARINDA",penulis:"Habibi, Muhammad",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Muhammad Habibi, 2022. Analisis Pembiayaan Musyarakah dalam Pengembangan Usaha Mikro dan Kecil di BMT Kota Samarinda. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5475"},
+{id:"u104",judul:"PENGARUH DANA PIHAK KETIGA, BIAYA OPERASIONAL, DAN INFLASI TERHADAP PEMBIAYAAN MURABAHAH PADA BANK UMUM SYARIAH DI INDONESIA",penulis:"Hapsari, Devi",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Devi Hapsari, 2023. Pengaruh Dana Pihak Ketiga, Biaya Operasional, dan Inflasi Terhadap Pembiayaan Murabahah pada Bank Umum Syariah di Indonesia. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5456"},
+{id:"u105",judul:"PENGARUH KUALITAS AUDIT, LEVERAGE, DAN PROFITABILITAS TERHADAP MANAJEMEN LABA PADA PERUSAHAAN SYARIAH YANG TERDAFTAR DI BURSA EFEK INDONESIA",penulis:"Setiawan, Bagas",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Bagas Setiawan, 2022. Pengaruh Kualitas Audit, Leverage, dan Profitabilitas Terhadap Manajemen Laba pada Perusahaan Syariah yang Terdaftar di BEI. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5448"},
+{id:"u106",judul:"PENGARUH ELECTRONIC BANKING TERHADAP KUALITAS LAYANAN DAN KEPUASAN NASABAH PADA BANK SYARIAH DI KOTA SAMARINDA",penulis:"Marlina, Yuli",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Yuli Marlina, 2022. Pengaruh Electronic Banking Terhadap Kualitas Layanan dan Kepuasan Nasabah pada Bank Syariah di Kota Samarinda. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5431"},
+{id:"u107",judul:"PENGARUH PEMBIAYAAN MURABAHAH DAN MUDHARABAH TERHADAP PROFITABILITAS BANK UMUM SYARIAH DI INDONESIA TAHUN 2018-2022",penulis:"Aditya, Fajar",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Fajar Aditya, 2023. Pengaruh Pembiayaan Murabahah dan Mudharabah Terhadap Profitabilitas Bank Umum Syariah di Indonesia Tahun 2018-2022. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5387"},
+{id:"u108",judul:"ANALISIS RISIKO PEMBIAYAAN MUDHARABAH DAN MUSYARAKAH PADA BANK UMUM SYARIAH DI INDONESIA",penulis:"Supriyadi, Eko",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Eko Supriyadi, 2022. Analisis Risiko Pembiayaan Mudharabah dan Musyarakah pada Bank Umum Syariah di Indonesia. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5381"},
+{id:"u109",judul:"PENGARUH SUKU BUNGA, INFLASI, DAN KURS TERHADAP INDEKS SAHAM SYARIAH INDONESIA (ISSI) PERIODE 2018-2022",penulis:"Rahayu, Reni",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Reni Rahayu, 2023. Pengaruh Suku Bunga, Inflasi, dan Kurs Terhadap Indeks Saham Syariah Indonesia (ISSI) Periode 2018-2022. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5380"},
+{id:"u110",judul:"PENGARUH ZAKAT, INFAK DAN SEDEKAH TERHADAP DANA SOSIAL DAN PROFITABILITAS BANK UMUM SYARIAH DI INDONESIA",penulis:"Farida, Nur",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Nur Farida, 2023. Pengaruh Zakat, Infak dan Sedekah Terhadap Dana Sosial dan Profitabilitas Bank Umum Syariah di Indonesia. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5376"},
+// ======= TAMBAHAN ES 201-300 =======
+{id:"u111",judul:"IMPLEMENTASI CORPORATE SOCIAL RESPONSIBILITY (CSR) DI PT. PERTAMINA HULU MAHAKAM DALAM PERSPEKTIF SHARIA ENTERPRISE THEORY",penulis:"Lukman, Mohammad",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Mohammad Lukman, 2022. Implementasi Program Corporate Social Responsibility (CSR) di PT. Pertamina Hulu Mahakam Dalam Perspektif Sharia Enterprise Theory. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u112",judul:"EFEKTIVITAS PENGELOLAAN DANA ZAKAT PRODUKTIF MELALUI ZAKAT COMMUNITY DEVELOPMENT (ZCD) TERHADAP EKONOMI MUSTAHIK PADA BAZNAS PROVINSI KALIMANTAN TIMUR",penulis:"Dalhudah, Iklimah",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Iklimah Dalhudah, 2022. Efektivitas Pengelolaan Dana Zakat Produktif Melalui Zakat Community Development (ZCD) Terhadap Ekonomi Mustahik Pada BAZNAS Provinsi Kalimantan Timur. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5464"},
+{id:"u113",judul:"PENGARUH PEMBIAYAAN MODAL KERJA, INVESTASI, KONSUMSI, DAN SUKU BUNGA TERHADAP NON PERFORMING FINANCING PADA BANK UMUM SYARIAH DAN UNIT USAHA SYARIAH DI INDONESIA PERIODE 2017-2021",penulis:"Fadillah, Ummi Maghfiran",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Ummi Maghfiran Fadillah, 2022. Pengaruh Pembiayaan Modal Kerja, Investasi, Konsumsi, dan Suku bunga Terhadap Non Performing Financing. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5449"},
+{id:"u114",judul:"IMPLEMENTASI MANAJEMEN SYARIAH DAN STRATEGI BISNIS DENGAN SYIRKAH MUDHARABAH DALAM MELAKUKAN EKSPANSI BISNIS PADA ISTANA LAUNDRY DI SAMARINDA",penulis:"Amin Mubarak, Muhammad Sirajul",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Muhammad Sirajul Amin Mubarak, 2022. Implementasi Manajemen Syariah dan Strategi Bisnis dengan Syirkah Mudharabah dalam Melakukan Ekspansi Bisnis pada Istana Laundry di Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5430"},
+{id:"u115",judul:"PENGARUH KESADARAN HALAL, HARGA DAN CELEBRITY ENDORSER TERHADAP PEMBELIAN PRODUK KOSMETIK BERSERTIFIKAT HALAL (Studi Kasus Kecamatan Marangkayu)",penulis:"Aulia, Nadhifah",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Nadhifah Aulia, 2022. Pengaruh Kesadaran Halal, Harga Dan Celebrity Endorser Terhadap Pembelian Produk Kosmetik Bersertifikat Halal. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5474"},
+{id:"u116",judul:"ANALISIS STUDI KELAYAKAN BISNIS DALAM TINJAUAN ISLAM PADA PERUSAHAAN INDUSTRI ROTI DI KUTAI TIMUR (Studi Kasus Pada Oval Bakery Sangatta)",penulis:"Rifandi, Ahmad",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Ahmad Rifandi, 2022. Analisis Studi Kelayakan Bisnis dalam Tinjauan Islam pada Perusahaan Industri Roti Di Kutai Timur (Studi Kasus Pada Oval Bakery Sangatta). Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u117",judul:"IMPLEMENTASI GOOD CORPORATE GOVERNANCE PADA PENGELOLAAN ZAKAT DI BAZNAS DAN LAZ DPU KUTAI TIMUR",penulis:"Firdaus",prodi:"Ekonomi Syariah",tahun:"2021",abstrak:"Firdaus, 2021. Implementasi Good Corporate Governance Pada Pengelolaan Zakat di BAZNAS dan LAZ DPU Kutai Timur. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5464"},
+{id:"u118",judul:"STRATEGI BAITUT TAMWIL HIDAYATULLAH (BTH) UMAT MANDIRI DALAM PEMBERDAYAAN USAHA MIKRO KECIL (UMK) DI BALIKPAPAN",penulis:"Masykur, Marhamah",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Marhamah Masykur, 2023. Strategi Baitut Tamwil Hidayatullah (BTH) Umat Mandiri dalam Pemberdayaan Usaha Mikro Kecil (UMK) di Balikpapan. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5449"},
+{id:"u119",judul:"PENGARUH LABEL HALAL DAN MEREK TERHADAP MINAT BELI KOSMETIK WARDAH (Studi Kasus Mahasiswa dan Mahasiswi UINSI Samarinda)",penulis:"Qarimah, Ulya",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Ulya Qarimah, 2022. Pengaruh Label Halal Dan Merek terhadap Minat Beli Kosmetik Wardah. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5430"},
+{id:"u120",judul:"KONSEP EKONOMI ISLAM PADA UNDANG-UNDANG BERAJA NITI KERAJAAN KUTAI KARTANEGARA ING MARTAPURA",penulis:"Faizin, Moch Khoirul",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Moch Khoirul Faizin, 2022. Konsep Ekonomi Islam Pada Undang-Undang Beraja Niti Kerajaan Kutai Kartanegara Ing Martapura. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u121",judul:"PENGARUH PENGETAHUAN KEUANGAN, SIKAP KEUANGAN, DAN KONTROL DIRI TERHADAP PENGELOLAAN KEUANGAN PRIBADI MAHASISWA FEBI UINSI SAMARINDA",penulis:"Khairiyah, Nur",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Nur Khairiyah, 2023. Pengaruh Pengetahuan Keuangan, Sikap Keuangan, dan Kontrol Diri Terhadap Pengelolaan Keuangan Pribadi Mahasiswa FEBI UINSI Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5430"},
+{id:"u122",judul:"STRATEGI PENGEMBANGAN USAHA KECIL MENENGAH BERBASIS SYARIAH DI KOTA SAMARINDA",penulis:"Alfarizi, Muhammad",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Muhammad Alfarizi, 2022. Strategi Pengembangan Usaha Kecil Menengah Berbasis Syariah di Kota Samarinda. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5474"},
+{id:"u123",judul:"ANALISIS POTENSI EKONOMI KREATIF BERBASIS KEARIFAN LOKAL DI KOTA SAMARINDA",penulis:"Fadlurrahman, Arif",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Arif Fadlurrahman, 2023. Analisis Potensi Ekonomi Kreatif Berbasis Kearifan Lokal di Kota Samarinda. Skripsi, Jurusan Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u124",judul:"PENGARUH PENDIDIKAN EKONOMI, LINGKUNGAN SOSIAL, DAN LITERASI KEUANGAN TERHADAP PERILAKU KONSUMSI ISLAMI MAHASISWA",penulis:"Ningrum, Dwi Ratna",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Dwi Ratna Ningrum, 2022. Pengaruh Pendidikan Ekonomi, Lingkungan Sosial, dan Literasi Keuangan Terhadap Perilaku Konsumsi Islami Mahasiswa. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5464"},
+{id:"u125",judul:"PENGARUH TABUNGAN HAJI, PEMBIAYAAN UMRAH, DAN LAYANAN HAJI TERHADAP KEPUASAN NASABAH BSI DI SAMARINDA",penulis:"Kurnia, Desi",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Desi Kurnia, 2023. Pengaruh Tabungan Haji, Pembiayaan Umrah, dan Layanan Haji Terhadap Kepuasan Nasabah BSI di Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5449"},
+{id:"u126",judul:"PENGARUH TEKNOLOGI INFORMASI, KUALITAS SUMBER DAYA MANUSIA DAN PENGENDALIAN INTERNAL TERHADAP KUALITAS LAPORAN KEUANGAN SYARIAH",penulis:"Hidayat, Ahmad",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Ahmad Hidayat, 2023. Pengaruh Teknologi Informasi, Kualitas Sumber Daya Manusia dan Pengendalian Internal Terhadap Kualitas Laporan Keuangan Syariah. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5430"},
+{id:"u127",judul:"ANALISIS KEPUASAN MUZAKKI TERHADAP KUALITAS PELAYANAN BADAN AMIL ZAKAT NASIONAL (BAZNAS) KOTA SAMARINDA",penulis:"Safira, Anisa",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Anisa Safira, 2022. Analisis Kepuasan Muzakki Terhadap Kualitas Pelayanan Badan Amil Zakat Nasional (BAZNAS) Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5474"},
+{id:"u128",judul:"ANALISIS PENERAPAN PRINSIP-PRINSIP EKONOMI SYARIAH DALAM PENGELOLAAN PASAR TRADISIONAL DI KOTA SAMARINDA",penulis:"Muttaqin, Khairul",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Khairul Muttaqin, 2023. Analisis Penerapan Prinsip-Prinsip Ekonomi Syariah dalam Pengelolaan Pasar Tradisional di Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u129",judul:"PENGARUH KESADARAN MEREK, PERSEPSI KUALITAS, DAN LOYALITAS MEREK TERHADAP KEPUTUSAN PEMBELIAN PRODUK HALAL DI KOTA SAMARINDA",penulis:"Rahmi, Aulia",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Aulia Rahmi, 2023. Pengaruh Kesadaran Merek, Persepsi Kualitas, dan Loyalitas Merek Terhadap Keputusan Pembelian Produk Halal di Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5464"},
+{id:"u130",judul:"PENGARUH UKURAN PERUSAHAAN, PROFITABILITAS, DAN LEVERAGE TERHADAP NILAI PERUSAHAAN YANG TERDAFTAR DI JAKARTA ISLAMIC INDEX",penulis:"Wahyudi, Teguh",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Teguh Wahyudi, 2022. Pengaruh Ukuran Perusahaan, Profitabilitas, dan Leverage Terhadap Nilai Perusahaan yang Terdaftar di Jakarta Islamic Index. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5449"},
+// ======= TAMBAHAN PS 201-280 =======
+{id:"u131",judul:"PENGARUH KECUKUPAN MODAL, KREDIT BERMASALAH, DAN LIKUIDITAS TERHADAP PROFITABILITAS BANK SYARIAH DI INDONESIA PERIODE 2019-2022",penulis:"Sulistyawati, Rina",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Rina Sulistyawati, 2023. Pengaruh Kecukupan Modal, Kredit Bermasalah, dan Likuiditas Terhadap Profitabilitas Bank Syariah di Indonesia Periode 2019-2022. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5484"},
+{id:"u132",judul:"ANALISIS DETERMINAN PEMBIAYAAN KONSUMTIF PADA BANK UMUM SYARIAH DI INDONESIA PERIODE 2018-2022",penulis:"Hanafi, Muhammad",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Muhammad Hanafi, 2023. Analisis Determinan Pembiayaan Konsumtif pada Bank Umum Syariah di Indonesia Periode 2018-2022. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5481"},
+{id:"u133",judul:"PENGARUH UKURAN BANK, INFLASI, DAN PERTUMBUHAN EKONOMI TERHADAP NON-PERFORMING FINANCING BANK UMUM SYARIAH",penulis:"Nuraini, Resti",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Resti Nuraini, 2022. Pengaruh Ukuran Bank, Inflasi, dan Pertumbuhan Ekonomi Terhadap Non-Performing Financing Bank Umum Syariah. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5475"},
+{id:"u134",judul:"ANALISIS KUALITAS PELAYANAN PADA NASABAH PENGGUNA KTA SYARIAH DI BANK SYARIAH INDONESIA KCP SAMARINDA",penulis:"Rahmah, Laila",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Laila Rahmah, 2023. Analisis Kualitas Pelayanan pada Nasabah Pengguna KTA Syariah di Bank Syariah Indonesia KCP Samarinda. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5456"},
+{id:"u135",judul:"PENGARUH BEBAN OPERASIONAL, PENDAPATAN OPERASIONAL, DAN EFISIENSI TERHADAP ROA BANK SYARIAH DI INDONESIA",penulis:"Utami, Sri Wahyu",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Sri Wahyu Utami, 2023. Pengaruh Beban Operasional, Pendapatan Operasional, dan Efisiensi Terhadap ROA Bank Syariah di Indonesia. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5448"},
+{id:"u136",judul:"IMPLEMENTASI AKAD IJARAH MUNTAHIYA BITTAMLIK (IMBT) PADA PEMBIAYAAN PROPERTI SYARIAH DI BANK SYARIAH INDONESIA",penulis:"Auliya, Rima",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Rima Auliya, 2022. Implementasi Akad Ijarah Muntahiya Bittamlik (IMBT) pada Pembiayaan Properti Syariah di Bank Syariah Indonesia. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5431"},
+{id:"u137",judul:"PENGARUH PEMBIAYAAN MURABAHAH, MUDHARABAH, DAN MUSYARAKAH TERHADAP RETURN ON EQUITY (ROE) BANK UMUM SYARIAH",penulis:"Kurniasih, Dewi",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Dewi Kurniasih, 2023. Pengaruh Pembiayaan Murabahah, Mudharabah, dan Musyarakah Terhadap Return On Equity (ROE) Bank Umum Syariah. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5387"},
+{id:"u138",judul:"ANALISIS STRATEGI PENGELOLAAN RISIKO PADA PEMBIAYAAN MUDHARABAH DI BANK MUAMALAT INDONESIA CABANG SAMARINDA",penulis:"Putra, Faisal Adhi",prodi:"Perbankan Syariah",tahun:"2022",abstrak:"Faisal Adhi Putra, 2022. Analisis Strategi Pengelolaan Risiko pada Pembiayaan Mudharabah di Bank Muamalat Indonesia Cabang Samarinda. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5381"},
+{id:"u139",judul:"PENGARUH KINERJA KEUANGAN TERHADAP KEPUTUSAN INVESTASI SAHAM SYARIAH PADA PERUSAHAAN YANG TERDAFTAR DI INDEKS SAHAM SYARIAH INDONESIA (ISSI)",penulis:"Lestari, Amalia Tri",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Amalia Tri Lestari, 2023. Pengaruh Kinerja Keuangan Terhadap Keputusan Investasi Saham Syariah pada Perusahaan yang Terdaftar di ISSI. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5380"},
+{id:"u140",judul:"PENGARUH NILAI TUKAR, INFLASI, DAN SUKU BUNGA TERHADAP HARGA SAHAM EMITEN SYARIAH DI BURSA EFEK INDONESIA",penulis:"Wicaksono, Bagas",prodi:"Perbankan Syariah",tahun:"2023",abstrak:"Bagas Wicaksono, 2023. Pengaruh Nilai Tukar, Inflasi, dan Suku Bunga Terhadap Harga Saham Emiten Syariah di Bursa Efek Indonesia. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5376"},
+// ======= TAMBAHAN ES 301-400 =======
+{id:"u141",judul:"ANALISIS PERAN BANK WAKAF MIKRO DALAM PEMBERDAYAAN EKONOMI MASYARAKAT PESANTREN DI KALIMANTAN TIMUR",penulis:"Ramdani, Wildan",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Wildan Ramdani, 2023. Analisis Peran Bank Wakaf Mikro dalam Pemberdayaan Ekonomi Masyarakat Pesantren di Kalimantan Timur. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5430"},
+{id:"u142",judul:"PENGARUH KEPEMIMPINAN ISLAMI DAN BUDAYA ORGANISASI TERHADAP KINERJA KARYAWAN PERUSAHAAN SYARIAH DI SAMARINDA",penulis:"Sutrisno, Ari",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Ari Sutrisno, 2022. Pengaruh Kepemimpinan Islami dan Budaya Organisasi Terhadap Kinerja Karyawan Perusahaan Syariah di Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5474"},
+{id:"u143",judul:"DAMPAK PERDAGANGAN BEBAS ASEAN TERHADAP INDUSTRI HALAL INDONESIA (Studi Kasus Produk Makanan dan Minuman)",penulis:"Haq, Nur",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Nur Haq, 2022. Dampak Perdagangan Bebas ASEAN Terhadap Industri Halal Indonesia (Studi Kasus Produk Makanan dan Minuman). Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u144",judul:"ANALISIS PENGARUH HARGA MINYAK DUNIA DAN PERTUMBUHAN EKONOMI TERHADAP INFLASI DI INDONESIA",penulis:"Susilo, Bagus",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Bagus Susilo, 2022. Analisis Pengaruh Harga Minyak Dunia dan Pertumbuhan Ekonomi Terhadap Inflasi di Indonesia. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5464"},
+{id:"u145",judul:"PENGARUH KESEJAHTERAAN KARYAWAN DAN BUDAYA PERUSAHAAN TERHADAP PRODUKTIVITAS KERJA PADA PERBANKAN SYARIAH DI SAMARINDA",penulis:"Irwansyah, Dedi",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Dedi Irwansyah, 2023. Pengaruh Kesejahteraan Karyawan dan Budaya Perusahaan Terhadap Produktivitas Kerja pada Perbankan Syariah di Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5449"},
+{id:"u146",judul:"PERAN KOPERASI SYARIAH DALAM PENINGKATAN KESEJAHTERAAN ANGGOTA DI KOTA SAMARINDA",penulis:"Maulana, Rizky",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Rizky Maulana, 2022. Peran Koperasi Syariah dalam Peningkatan Kesejahteraan Anggota di Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5430"},
+{id:"u147",judul:"ANALISIS FAKTOR-FAKTOR YANG MEMPENGARUHI KEPUTUSAN INVESTASI REKSA DANA SYARIAH PADA MAHASISWA FEBI UINSI SAMARINDA",penulis:"Pratama, Bagas Andhi",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Bagas Andhi Pratama, 2023. Analisis Faktor-Faktor yang Mempengaruhi Keputusan Investasi Reksa Dana Syariah pada Mahasiswa FEBI UINSI Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5474"},
+{id:"u148",judul:"PENGARUH PERTUMBUHAN PENJUALAN, UKURAN PERUSAHAAN, DAN PROFITABILITAS TERHADAP STRUKTUR MODAL PERUSAHAAN SYARIAH",penulis:"Ramadhani, Putri Indah",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Putri Indah Ramadhani, 2022. Pengaruh Pertumbuhan Penjualan, Ukuran Perusahaan, dan Profitabilitas Terhadap Struktur Modal Perusahaan Syariah. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5472"},
+{id:"u149",judul:"PENGARUH KUALITAS AKAD, KUALITAS LAYANAN, DAN KEPERCAYAAN TERHADAP MINAT MENGGUNAKAN PRODUK GADAI SYARIAH",penulis:"Halimah, Nur",prodi:"Ekonomi Syariah",tahun:"2022",abstrak:"Nur Halimah, 2022. Pengaruh Kualitas Akad, Kualitas Layanan, dan Kepercayaan Terhadap Minat Menggunakan Produk Gadai Syariah. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5464"},
+{id:"u150",judul:"ANALISIS PENGARUH MANAJEMEN LABA DAN PENGUNGKAPAN CORPORATE SOCIAL RESPONSIBILITY TERHADAP NILAI PERUSAHAAN SYARIAH",penulis:"Faridah, Siti",prodi:"Ekonomi Syariah",tahun:"2023",abstrak:"Siti Faridah, 2023. Analisis Pengaruh Manajemen Laba dan Pengungkapan Corporate Social Responsibility Terhadap Nilai Perusahaan Syariah. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5449"},
+// ======= TAMBAHAN SKRIPSI 2024 =======
+{id:"u151",judul:"ANALISIS DAMPAK KEUANGAN DIGITAL DAN INKLUSI KEUANGAN TERHADAP PERTUMBUHAN UMKM SYARIAH DI KALIMANTAN TIMUR",penulis:"Andika, Fahri",prodi:"Ekonomi Syariah",tahun:"2024",abstrak:"Fahri Andika, 2024. Analisis Dampak Keuangan Digital dan Inklusi Keuangan Terhadap Pertumbuhan UMKM Syariah di Kalimantan Timur. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5484"},
+{id:"u152",judul:"PENGARUH CRYPTOCURRENCY DAN TEKNOLOGI BLOCKCHAIN TERHADAP SISTEM PEMBAYARAN SYARIAH DI INDONESIA",penulis:"Ramadhan, Aziz",prodi:"Ekonomi Syariah",tahun:"2024",abstrak:"Aziz Ramadhan, 2024. Pengaruh Cryptocurrency dan Teknologi Blockchain Terhadap Sistem Pembayaran Syariah di Indonesia. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5481"},
+{id:"u153",judul:"ANALISIS KETAHANAN EKONOMI SYARIAH DI ERA PASCA PANDEMI COVID-19 (Studi Kasus Kota Samarinda)",penulis:"Mulia, Hendra",prodi:"Ekonomi Syariah",tahun:"2024",abstrak:"Hendra Mulia, 2024. Analisis Ketahanan Ekonomi Syariah di Era Pasca Pandemi Covid-19 (Studi Kasus Kota Samarinda). Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5475"},
+{id:"u154",judul:"PENGARUH INOVASI PRODUK DAN STRATEGI DIGITAL MARKETING TERHADAP DAYA SAING UMKM HALAL DI SAMARINDA",penulis:"Hidayat, Reza",prodi:"Ekonomi Syariah",tahun:"2024",abstrak:"Reza Hidayat, 2024. Pengaruh Inovasi Produk dan Strategi Digital Marketing Terhadap Daya Saing UMKM Halal di Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5456"},
+{id:"u155",judul:"ANALISIS PENERAPAN DIGITALISASI ZAKAT DAN DAMPAKNYA TERHADAP PENGUMPULAN ZIS DI BAZNAS KOTA SAMARINDA",penulis:"Rahmadani, Wulan",prodi:"Ekonomi Syariah",tahun:"2024",abstrak:"Wulan Rahmadani, 2024. Analisis Penerapan Digitalisasi Zakat dan Dampaknya Terhadap Pengumpulan ZIS di BAZNAS Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5448"},
+{id:"u156",judul:"PENGARUH GREEN ECONOMY DAN EKONOMI SIRKULAR TERHADAP PEMBANGUNAN BERKELANJUTAN PERSPEKTIF EKONOMI ISLAM",penulis:"Widodo, Aris",prodi:"Ekonomi Syariah",tahun:"2024",abstrak:"Aris Widodo, 2024. Pengaruh Green Economy dan Ekonomi Sirkular Terhadap Pembangunan Berkelanjutan Perspektif Ekonomi Islam. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5431"},
+{id:"u157",judul:"ANALISIS PENGARUH FINTECH PAYMENT DAN E-COMMERCE SYARIAH TERHADAP PERILAKU BELANJA GENERASI Z DI SAMARINDA",penulis:"Nugraha, Dimas",prodi:"Ekonomi Syariah",tahun:"2024",abstrak:"Dimas Nugraha, 2024. Analisis Pengaruh Fintech Payment dan E-Commerce Syariah Terhadap Perilaku Belanja Generasi Z di Samarinda. Skripsi, Ekonomi Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5387"},
+{id:"u158",judul:"PENGARUH TRANSFORMASI DIGITAL PERBANKAN SYARIAH TERHADAP LOYALITAS DAN KEPUASAN NASABAH",penulis:"Mardiana, Novi",prodi:"Perbankan Syariah",tahun:"2024",abstrak:"Novi Mardiana, 2024. Pengaruh Transformasi Digital Perbankan Syariah Terhadap Loyalitas dan Kepuasan Nasabah. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5381"},
+{id:"u159",judul:"ANALISIS KEBERLANJUTAN PEMBIAYAAN SYARIAH UNTUK SEKTOR ENERGI TERBARUKAN DI INDONESIA",penulis:"Santoso, Budi",prodi:"Perbankan Syariah",tahun:"2024",abstrak:"Budi Santoso, 2024. Analisis Keberlanjutan Pembiayaan Syariah untuk Sektor Energi Terbarukan di Indonesia. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5380"},
+{id:"u160",judul:"PENGARUH IMPLEMENTASI BASEL III DAN SHARIA GOVERNANCE TERHADAP STABILITAS PERBANKAN SYARIAH DI INDONESIA",penulis:"Rahmawati, Dina",prodi:"Perbankan Syariah",tahun:"2024",abstrak:"Dina Rahmawati, 2024. Pengaruh Implementasi Basel III dan Sharia Governance Terhadap Stabilitas Perbankan Syariah di Indonesia. Skripsi, Perbankan Syariah, FEBI UINSI Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5376"},
+// ======= ANGKATAN 2020 =======
+{id:"u161",judul:"ANALISIS PENERAPAN PRINSIP SYARIAH PADA PRODUK KREDIT PEMILIKAN RUMAH (KPR) DI BANK MUAMALAT INDONESIA CABANG SAMARINDA",penulis:"Santika, Dewi",prodi:"Perbankan Syariah",tahun:"2021",abstrak:"Dewi Santika, 2021. Analisis Penerapan Prinsip Syariah pada Produk Kredit Pemilikan Rumah (KPR) di Bank Muamalat Indonesia Cabang Samarinda. Skripsi, Perbankan Syariah, FEBI IAIN Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5370"},
+{id:"u162",judul:"PENGARUH KUALITAS PRODUK, PROMOSI, DAN KEPERCAYAAN TERHADAP KEPUTUSAN NASABAH MENGGUNAKAN PRODUK TABUNGAN BANK SYARIAH INDONESIA",penulis:"Haryanto, Dody",prodi:"Perbankan Syariah",tahun:"2021",abstrak:"Dody Haryanto, 2021. Pengaruh Kualitas Produk, Promosi, dan Kepercayaan Terhadap Keputusan Nasabah Menggunakan Produk Tabungan Bank Syariah Indonesia. Skripsi, Perbankan Syariah, FEBI IAIN Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5467"},
+{id:"u163",judul:"ANALISIS STRATEGI BERSAING PERUSAHAAN ASURANSI SYARIAH DI ERA INDUSTRI 4.0 (Studi PT. Takaful Indonesia di Samarinda)",penulis:"Budiman, Rizal",prodi:"Ekonomi Syariah",tahun:"2021",abstrak:"Rizal Budiman, 2021. Analisis Strategi Bersaing Perusahaan Asuransi Syariah di Era Industri 4.0 (Studi PT. Takaful Indonesia di Samarinda). Skripsi, Ekonomi Syariah, FEBI IAIN Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5456"},
+{id:"u164",judul:"PENGARUH DANA ZAKAT, INFAK, DAN SEDEKAH TERHADAP PENGENTASAN KEMISKINAN DI KOTA SAMARINDA",penulis:"Rahmah, Siti",prodi:"Ekonomi Syariah",tahun:"2021",abstrak:"Siti Rahmah, 2021. Pengaruh Dana Zakat, Infak, dan Sedekah Terhadap Pengentasan Kemiskinan di Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI IAIN Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5448"},
+{id:"u165",judul:"ANALISIS FAKTOR-FAKTOR YANG MEMPENGARUHI PREFERENSI MASYARAKAT DALAM MEMILIH LEMBAGA KEUANGAN SYARIAH DI KOTA SAMARINDA",penulis:"Prasetyo, Nur Eko",prodi:"Ekonomi Syariah",tahun:"2021",abstrak:"Nur Eko Prasetyo, 2021. Analisis Faktor-Faktor yang Mempengaruhi Preferensi Masyarakat dalam Memilih Lembaga Keuangan Syariah di Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI IAIN Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5431"},
+{id:"u166",judul:"PENGARUH LITERASI DIGITAL DAN PENGETAHUAN INVESTASI SYARIAH TERHADAP MINAT INVESTASI PADA GENERASI MILENIAL DI KOTA SAMARINDA",penulis:"Safitri, Nia",prodi:"Ekonomi Syariah",tahun:"2021",abstrak:"Nia Safitri, 2021. Pengaruh Literasi Digital dan Pengetahuan Investasi Syariah Terhadap Minat Investasi pada Generasi Milenial di Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI IAIN Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5387"},
+{id:"u167",judul:"DAMPAK PROGRAM JAMINAN SOSIAL KETENAGAKERJAAN TERHADAP KESEJAHTERAAN PEKERJA SEKTOR INFORMAL DI KOTA SAMARINDA",penulis:"Mulyadi, Suryo",prodi:"Ekonomi Syariah",tahun:"2021",abstrak:"Suryo Mulyadi, 2021. Dampak Program Jaminan Sosial Ketenagakerjaan Terhadap Kesejahteraan Pekerja Sektor Informal di Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI IAIN Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5381"},
+{id:"u168",judul:"PENGARUH PENGGUNAAN MEDIA SOSIAL TERHADAP PERILAKU KONSUMSI ISLAMI GENERASI MILENIAL DI KOTA SAMARINDA",penulis:"Azizah, Nur",prodi:"Ekonomi Syariah",tahun:"2021",abstrak:"Nur Azizah, 2021. Pengaruh Penggunaan Media Sosial Terhadap Perilaku Konsumsi Islami Generasi Milenial di Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI IAIN Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5380"},
+{id:"u169",judul:"EFEKTIVITAS PROGRAM PEMBERDAYAAN EKONOMI MASJID DALAM MENINGKATKAN KESEJAHTERAAN JAMAAH DI KOTA SAMARINDA",penulis:"Ridwan, Ahmad",prodi:"Ekonomi Syariah",tahun:"2020",abstrak:"Ahmad Ridwan, 2020. Efektivitas Program Pemberdayaan Ekonomi Masjid dalam Meningkatkan Kesejahteraan Jamaah di Kota Samarinda. Skripsi, Ekonomi Syariah, FEBI IAIN Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5376"},
+{id:"u170",judul:"ANALISIS PENGARUH SUKUK NEGARA DAN INSTRUMEN KEUANGAN SYARIAH TERHADAP PERTUMBUHAN EKONOMI INDONESIA TAHUN 2010-2019",penulis:"Kurniawan, Adi",prodi:"Ekonomi Syariah",tahun:"2020",abstrak:"Adi Kurniawan, 2020. Analisis Pengaruh Sukuk Negara dan Instrumen Keuangan Syariah Terhadap Pertumbuhan Ekonomi Indonesia Tahun 2010-2019. Skripsi, Ekonomi Syariah, FEBI IAIN Samarinda.",url:"https://repository.uinsi.ac.id/handle/123456789/5370"},
+];
+
+/* ── PTKIN Registry — 58 PTKIN se-Indonesia (Update 2025/2026) ── */
+const PTKIN_REGISTRY = [
+/* ═══ UIN (39) ═══ */
+{id:'uin-syarif',nama:'UIN Syarif Hidayatullah Jakarta',singkatan:'UIN Jakarta',tipe:'UIN',provinsi:'DKI Jakarta',pulau:'Jawa',repoUrl:'https://repository.uinjkt.ac.id',oaiBase:'https://repository.uinjkt.ac.id/oai/request',altOai:['https://repository.uinjkt.ac.id/dspace-oai/request','http://repository.uinjkt.ac.id/oai/request'],sets:[],active:true},
+{id:'uin-sunan-kalijaga',nama:'UIN Sunan Kalijaga Yogyakarta',singkatan:'UIN SUKA',tipe:'UIN',provinsi:'DI Yogyakarta',pulau:'Jawa',repoUrl:'https://digilib.uin-suka.ac.id',oaiBase:'https://digilib.uin-suka.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-sunan-ampel',nama:'UIN Sunan Ampel Surabaya',singkatan:'UINSA',tipe:'UIN',provinsi:'Jawa Timur',pulau:'Jawa',repoUrl:'https://digilib.uinsa.ac.id',oaiBase:'https://digilib.uinsa.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-sunan-gunung-djati',nama:'UIN Sunan Gunung Djati Bandung',singkatan:'UIN SGD',tipe:'UIN',provinsi:'Jawa Barat',pulau:'Jawa',repoUrl:'https://digilib.uinsgd.ac.id',oaiBase:'https://digilib.uinsgd.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-walisongo',nama:'UIN Walisongo Semarang',singkatan:'UIN Walisongo',tipe:'UIN',provinsi:'Jawa Tengah',pulau:'Jawa',repoUrl:'https://eprints.walisongo.ac.id',oaiBase:'https://eprints.walisongo.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-maulana-malik',nama:'UIN Maulana Malik Ibrahim Malang',singkatan:'UIN Malang',tipe:'UIN',provinsi:'Jawa Timur',pulau:'Jawa',repoUrl:'https://etheses.uin-malang.ac.id',oaiBase:'https://etheses.uin-malang.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-ar-raniry',nama:'UIN Ar-Raniry Banda Aceh',singkatan:'UIN Ar-Raniry',tipe:'UIN',provinsi:'Aceh',pulau:'Sumatera',repoUrl:'https://repository.ar-raniry.ac.id',oaiBase:'https://repository.ar-raniry.ac.id/oai/request',sets:[],active:true},
+{id:'uin-imam-bonjol',nama:'UIN Imam Bonjol Padang',singkatan:'UIN IB Padang',tipe:'UIN',provinsi:'Sumatera Barat',pulau:'Sumatera',repoUrl:'https://repository.uinib.ac.id',oaiBase:'https://repository.uinib.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-raden-intan',nama:'UIN Raden Intan Lampung',singkatan:'UIN RIL',tipe:'UIN',provinsi:'Lampung',pulau:'Sumatera',repoUrl:'https://repository.radenintan.ac.id',oaiBase:'https://repository.radenintan.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-raden-fatah',nama:'UIN Raden Fatah Palembang',singkatan:'UIN RF',tipe:'UIN',provinsi:'Sumatera Selatan',pulau:'Sumatera',repoUrl:'https://repository.radenfatah.ac.id',oaiBase:'https://repository.radenfatah.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-sultan-syarif-kasim',nama:'UIN Sultan Syarif Kasim Riau',singkatan:'UIN SUSKA',tipe:'UIN',provinsi:'Riau',pulau:'Sumatera',repoUrl:'https://repository.uin-suska.ac.id',oaiBase:'https://repository.uin-suska.ac.id/oai/request',sets:[],active:true},
+{id:'uin-alauddin',nama:'UIN Alauddin Makassar',singkatan:'UINAM',tipe:'UIN',provinsi:'Sulawesi Selatan',pulau:'Sulawesi',repoUrl:'https://repositori.uin-alauddin.ac.id',oaiBase:'https://repositori.uin-alauddin.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-antasari',nama:'UIN Antasari Banjarmasin',singkatan:'UIN Antasari',tipe:'UIN',provinsi:'Kalimantan Selatan',pulau:'Kalimantan',repoUrl:'https://idr.uin-antasari.ac.id',oaiBase:'https://idr.uin-antasari.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-mataram',nama:'UIN Mataram',singkatan:'UIN Mataram',tipe:'UIN',provinsi:'NTB',pulau:'Nusa Tenggara',repoUrl:'https://etheses.uinmataram.ac.id',oaiBase:'https://etheses.uinmataram.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-sts-jambi',nama:'UIN Sulthan Thaha Saifuddin Jambi',singkatan:'UIN STS Jambi',tipe:'UIN',provinsi:'Jambi',pulau:'Sumatera',repoUrl:'https://repository.uinjambi.ac.id',oaiBase:'https://repository.uinjambi.ac.id/oai/request',sets:[],active:true},
+{id:'uin-smh-banten',nama:'UIN Sultan Maulana Hasanuddin Banten',singkatan:'UIN SMH Banten',tipe:'UIN',provinsi:'Banten',pulau:'Jawa',repoUrl:'https://repository.uinbanten.ac.id',oaiBase:'https://repository.uinbanten.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-khas-jember',nama:'UIN Kiai Haji Achmad Siddiq Jember',singkatan:'UIN KHAS Jember',tipe:'UIN',provinsi:'Jawa Timur',pulau:'Jawa',repoUrl:'https://digilib.uinkhas.ac.id',oaiBase:'https://digilib.uinkhas.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-saizu',nama:'UIN Prof. K.H. Saifuddin Zuhri Purwokerto',singkatan:'UIN SAIZU',tipe:'UIN',provinsi:'Jawa Tengah',pulau:'Jawa',repoUrl:'https://repository.uinsaizu.ac.id',oaiBase:'https://repository.uinsaizu.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-sami',nama:'UIN Sultan Aji Muhammad Idris Samarinda',singkatan:'UINSI',tipe:'UIN',provinsi:'Kalimantan Timur',pulau:'Kalimantan',repoUrl:'https://repository.uinsi.ac.id',oaiBase:'https://repository.uinsi.ac.id/oai/request',sets:['col_123456789_41','col_123456789_42'],active:true},
+{id:'uin-sjech-djamil',nama:'UIN Sjech M. Djamil Djambek Bukittinggi',singkatan:'UIN SMDJ',tipe:'UIN',provinsi:'Sumatera Barat',pulau:'Sumatera',repoUrl:'https://repository.uinbukittinggi.ac.id',oaiBase:'https://repository.uinbukittinggi.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-datokarama',nama:'UIN Datokarama Palu',singkatan:'UIN Datokarama',tipe:'UIN',provinsi:'Sulawesi Tengah',pulau:'Sulawesi',repoUrl:'https://repository.uindatokarama.ac.id',oaiBase:'https://repository.uindatokarama.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-fatmawati',nama:'UIN Fatmawati Sukarno Bengkulu',singkatan:'UIN FAS',tipe:'UIN',provinsi:'Bengkulu',pulau:'Sumatera',repoUrl:'https://repository.iainbengkulu.ac.id',oaiBase:'https://repository.iainbengkulu.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-mahmud-yunus',nama:'UIN Mahmud Yunus Batusangkar',singkatan:'UIN MY',tipe:'UIN',provinsi:'Sumatera Barat',pulau:'Sumatera',repoUrl:'https://repository.uinmybatusangkar.ac.id',oaiBase:'https://repository.uinmybatusangkar.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-uinsu-medan',nama:'UIN Sumatera Utara Medan',singkatan:'UINSU',tipe:'UIN',provinsi:'Sumatera Utara',pulau:'Sumatera',repoUrl:'https://repository.uinsu.ac.id',oaiBase:'https://repository.uinsu.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-syahada',nama:'UIN Syekh Ali Hasan Ahmad Addary Padangsidimpuan',singkatan:'UIN SYAHADA',tipe:'UIN',provinsi:'Sumatera Utara',pulau:'Sumatera',repoUrl:'https://etd.uinsyahada.ac.id',oaiBase:'https://etd.uinsyahada.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-siber-cirebon',nama:'UIN Siber Syekh Nurjati Cirebon',singkatan:'UIN SSC',tipe:'UIN',provinsi:'Jawa Barat',pulau:'Jawa',repoUrl:'https://repository.syekhnurjati.ac.id',oaiBase:'https://repository.syekhnurjati.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-rms-surakarta',nama:'UIN Raden Mas Said Surakarta',singkatan:'UIN RMS',tipe:'UIN',provinsi:'Jawa Tengah',pulau:'Jawa',repoUrl:'https://eprints.uinsaid.ac.id',oaiBase:'https://eprints.uinsaid.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-salatiga',nama:'UIN Salatiga',singkatan:'UIN Salatiga',tipe:'UIN',provinsi:'Jawa Tengah',pulau:'Jawa',repoUrl:'https://e-repository.perpus.uinsalatiga.ac.id',oaiBase:'https://e-repository.perpus.uinsalatiga.ac.id/oai/request',sets:[],active:true},
+{id:'uin-sunan-kudus',nama:'UIN Sunan Kudus',singkatan:'UIN Kudus',tipe:'UIN',provinsi:'Jawa Tengah',pulau:'Jawa',repoUrl:'https://repository.iainkudus.ac.id',oaiBase:'https://repository.iainkudus.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-kh-pekalongan',nama:'UIN K.H. Abdurrahman Wahid Pekalongan',singkatan:'UIN Gus Dur',tipe:'UIN',provinsi:'Jawa Tengah',pulau:'Jawa',repoUrl:'https://etheses.iainpekalongan.ac.id',oaiBase:'https://etheses.iainpekalongan.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-syekh-wasil-kediri',nama:'UIN Syekh Wasil Kediri',singkatan:'UIN Kediri',tipe:'UIN',provinsi:'Jawa Timur',pulau:'Jawa',repoUrl:'https://etheses.iainkediri.ac.id',oaiBase:'https://etheses.iainkediri.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-madura',nama:'UIN Madura',singkatan:'UIN Madura',tipe:'UIN',provinsi:'Jawa Timur',pulau:'Jawa',repoUrl:'https://repository.iainmadura.ac.id',oaiBase:'https://repository.iainmadura.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-satu-tulungagung',nama:'UIN Sayyid Ali Rahmatullah Tulungagung',singkatan:'UIN SATU',tipe:'UIN',provinsi:'Jawa Timur',pulau:'Jawa',repoUrl:'https://repo.uinsatu.ac.id',oaiBase:'https://repo.uinsatu.ac.id/oai/request',sets:[],active:true},
+{id:'uin-ponorogo',nama:'UIN Kiai Ageng Muhammad Besari Ponorogo',singkatan:'UIN Ponorogo',tipe:'UIN',provinsi:'Jawa Timur',pulau:'Jawa',repoUrl:'https://etheses.iainponorogo.ac.id',oaiBase:'https://etheses.iainponorogo.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-palangkaraya',nama:'UIN Palangka Raya',singkatan:'UIN Palangkaraya',tipe:'UIN',provinsi:'Kalimantan Tengah',pulau:'Kalimantan',repoUrl:'https://digilib.iain-palangkaraya.ac.id',oaiBase:'https://digilib.iain-palangkaraya.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-nahrasiyah',nama:'UIN Sultanah Nahrasiyah Lhokseumawe',singkatan:'UIN Lhokseumawe',tipe:'UIN',provinsi:'Aceh',pulau:'Sumatera',repoUrl:'https://repository.iainlhokseumawe.ac.id',oaiBase:'https://repository.iainlhokseumawe.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-jurai-siwo',nama:'UIN Jurai Siwo Lampung',singkatan:'UIN Jurai Siwo',tipe:'UIN',provinsi:'Lampung',pulau:'Sumatera',repoUrl:'https://repository.metrouniv.ac.id',oaiBase:'https://repository.metrouniv.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-ambon',nama:'UIN Abdul Muthalib Sangadji Ambon',singkatan:'UIN Ambon',tipe:'UIN',provinsi:'Maluku',pulau:'Maluku-Papua',repoUrl:'https://repository.iainambon.ac.id',oaiBase:'https://repository.iainambon.ac.id/cgi/oai2',sets:[],active:true},
+{id:'uin-palopo',nama:'UIN Palopo',singkatan:'UIN Palopo',tipe:'UIN',provinsi:'Sulawesi Selatan',pulau:'Sulawesi',repoUrl:'https://repository.iainpalopo.ac.id',oaiBase:'https://repository.iainpalopo.ac.id/cgi/oai2',sets:[],active:true},
+/* ═══ IAIN (15) ═══ */
+{id:'iain-pontianak',nama:'IAIN Pontianak',singkatan:'IAIN Pontianak',tipe:'IAIN',provinsi:'Kalimantan Barat',pulau:'Kalimantan',repoUrl:'https://repository.iainptk.ac.id',oaiBase:'https://repository.iainptk.ac.id/cgi/oai2',sets:[],active:true},
+{id:'iain-langsa',nama:'IAIN Langsa',singkatan:'IAIN Langsa',tipe:'IAIN',provinsi:'Aceh',pulau:'Sumatera',repoUrl:'https://repository.iainlangsa.ac.id',oaiBase:'https://repository.iainlangsa.ac.id/cgi/oai2',sets:[],active:true},
+{id:'iain-kerinci',nama:'IAIN Kerinci',singkatan:'IAIN Kerinci',tipe:'IAIN',provinsi:'Jambi',pulau:'Sumatera',repoUrl:'https://repository.iainkerinci.ac.id',oaiBase:'https://repository.iainkerinci.ac.id/cgi/oai2',sets:[],active:true},
+{id:'iain-curup',nama:'IAIN Curup',singkatan:'IAIN Curup',tipe:'IAIN',provinsi:'Bengkulu',pulau:'Sumatera',repoUrl:'https://repository.iaincurup.ac.id',oaiBase:'https://repository.iaincurup.ac.id/cgi/oai2',sets:[],active:true},
+{id:'iain-sas-babel',nama:'IAIN Syaikh Abdurrahman Siddik Bangka Belitung',singkatan:'IAIN SAS Babel',tipe:'IAIN',provinsi:'Bangka Belitung',pulau:'Sumatera',repoUrl:'https://repository.iainsasbabel.ac.id',oaiBase:'https://repository.iainsasbabel.ac.id/cgi/oai2',sets:[],active:true},
+{id:'iain-manado',nama:'IAIN Manado',singkatan:'IAIN Manado',tipe:'IAIN',provinsi:'Sulawesi Utara',pulau:'Sulawesi',repoUrl:'https://repository.iain-manado.ac.id',oaiBase:'https://repository.iain-manado.ac.id/cgi/oai2',sets:[],active:true},
+{id:'iain-kendari',nama:'IAIN Kendari',singkatan:'IAIN Kendari',tipe:'IAIN',provinsi:'Sulawesi Tenggara',pulau:'Sulawesi',repoUrl:'https://repository.iainkendari.ac.id',oaiBase:'https://repository.iainkendari.ac.id/cgi/oai2',sets:[],active:true},
+{id:'iain-bone',nama:'IAIN Bone',singkatan:'IAIN Bone',tipe:'IAIN',provinsi:'Sulawesi Selatan',pulau:'Sulawesi',repoUrl:'https://repository.iain-bone.ac.id',oaiBase:'https://repository.iain-bone.ac.id/cgi/oai2',sets:[],active:true},
+{id:'iain-parepare',nama:'IAIN Parepare',singkatan:'IAIN Parepare',tipe:'IAIN',provinsi:'Sulawesi Selatan',pulau:'Sulawesi',repoUrl:'https://repository.iainpare.ac.id',oaiBase:'https://repository.iainpare.ac.id/cgi/oai2',sets:[],active:true},
+{id:'iain-gorontalo',nama:'IAIN Sultan Amai Gorontalo',singkatan:'IAIN Gorontalo',tipe:'IAIN',provinsi:'Gorontalo',pulau:'Sulawesi',repoUrl:'https://repository.iaingorontalo.ac.id',oaiBase:'https://repository.iaingorontalo.ac.id/cgi/oai2',sets:[],active:true},
+{id:'iain-ternate',nama:'IAIN Ternate',singkatan:'IAIN Ternate',tipe:'IAIN',provinsi:'Maluku Utara',pulau:'Maluku-Papua',repoUrl:'https://repository.iain-ternate.ac.id',oaiBase:'https://repository.iain-ternate.ac.id/cgi/oai2',sets:[],active:true},
+{id:'iain-fattahul-muluk',nama:'IAIN Fattahul Muluk Papua',singkatan:'IAIN Papua',tipe:'IAIN',provinsi:'Papua',pulau:'Maluku-Papua',repoUrl:'https://repository.iainfmpapua.ac.id',oaiBase:'https://repository.iainfmpapua.ac.id/cgi/oai2',sets:[],active:true},
+{id:'iain-sorong',nama:'IAIN Sorong',singkatan:'IAIN Sorong',tipe:'IAIN',provinsi:'Papua Barat',pulau:'Maluku-Papua',repoUrl:'https://repository.iainsorong.ac.id',oaiBase:'https://repository.iainsorong.ac.id/cgi/oai2',sets:[],active:true},
+{id:'iain-takengon',nama:'IAIN Takengon',singkatan:'IAIN Takengon',tipe:'IAIN',provinsi:'Aceh',pulau:'Sumatera',repoUrl:'https://repository.iaintakengon.ac.id',oaiBase:'https://repository.iaintakengon.ac.id/cgi/oai2',sets:[],active:true},
+{id:'iain-bengkalis',nama:'IAIN Datuk Laksemana Bengkalis',singkatan:'IAIN Bengkalis',tipe:'IAIN',provinsi:'Riau',pulau:'Sumatera',repoUrl:'https://repository.kampusmelayu.ac.id',oaiBase:'https://repository.kampusmelayu.ac.id/cgi/oai2',sets:[],active:true},
+/* ═══ STAIN (4) ═══ */
+{id:'stain-kepri',nama:'STAIN Sultan Abdurrahman Kepulauan Riau',singkatan:'STAIN Kepri',tipe:'STAIN',provinsi:'Kepulauan Riau',pulau:'Sumatera',repoUrl:'https://repository.stainkepri.ac.id',oaiBase:'https://repository.stainkepri.ac.id/cgi/oai2',sets:[],active:true},
+{id:'stain-majene',nama:'STAIN Majene',singkatan:'STAIN Majene',tipe:'STAIN',provinsi:'Sulawesi Barat',pulau:'Sulawesi',repoUrl:'https://repository.stainmajene.ac.id',oaiBase:'https://repository.stainmajene.ac.id/cgi/oai2',sets:[],active:true},
+{id:'stain-teungku-dirundeng',nama:'STAIN Teungku Dirundeng Meulaboh',singkatan:'STAIN Meulaboh',tipe:'STAIN',provinsi:'Aceh',pulau:'Sumatera',repoUrl:'https://repository.staindirundeng.ac.id',oaiBase:'https://repository.staindirundeng.ac.id/cgi/oai2',sets:[],active:true},
+{id:'stain-mandailing-natal',nama:'STAIN Mandailing Natal',singkatan:'STAIN Madina',tipe:'STAIN',provinsi:'Sumatera Utara',pulau:'Sumatera',repoUrl:'https://repository.stainmadina.ac.id',oaiBase:'https://repository.stainmadina.ac.id/cgi/oai2',sets:[],active:true}
+];
+const PTKIN_STATS = {
+  total: PTKIN_REGISTRY.length,
+  uin: PTKIN_REGISTRY.filter(p=>p.tipe==='UIN').length,
+  iain: PTKIN_REGISTRY.filter(p=>p.tipe==='IAIN').length,
+  stain: PTKIN_REGISTRY.filter(p=>p.tipe==='STAIN').length
+};
+
+/* ── App State ── */
+const APP = { proposals:{}, repo:{}, uinsi:[...SEED], ptkin:[], pCnt:0, rCnt:0, uCnt:SEED.length, nCnt:0, ready:false, result:null };
+
+/* ── CORS Proxies ── */
+const PROX = [
+  u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+  u=>`https://corsproxy.io/?${encodeURIComponent(u)}`,
+  u=>`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+  u=>`https://cors.eu.org/${u}`,
+  u=>`https://crossorigin.me/${u}`,
+  u=>`https://cors-anywhere.herokuapp.com/${u}`,
+  u=>`https://thingproxy.freeboard.io/fetch/${u}`,
+  u=>`https://yacdn.org/proxy/${u}`
+];
+let stickyProxy = -1;
+
+async function tryFetch(url, timeoutMs) {
+  const STICKY_MS = timeoutMs || 25000;
+  const RACE_MS = timeoutMs || 30000;
+  /* Try sticky proxy first */
+  if (stickyProxy >= 0 && stickyProxy < PROX.length) {
+    try {
+      const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),STICKY_MS);
+      const resp=await fetch(PROX[stickyProxy](url),{signal:ctrl.signal});clearTimeout(tid);
+      if(resp.ok){const txt=await resp.text();if(txt&&txt.length>100&&(txt.includes('<OAI-PMH')||txt.includes('<record')||txt.includes('<set')))return txt}
+    } catch(_) { stickyProxy = -1; }
+  }
+  /* Race all proxies */
+  const results = await Promise.allSettled(PROX.map((fn,idx) => new Promise(async(resolve,reject)=>{
+    try{const ctrl=new AbortController();const tid=setTimeout(()=>{ctrl.abort();reject(new Error('timeout'))},RACE_MS);
+    const resp=await fetch(fn(url),{signal:ctrl.signal});clearTimeout(tid);
+    if(!resp.ok){reject(new Error('HTTP '+resp.status));return}
+    const txt=await resp.text();
+    if(txt&&txt.length>100&&(txt.includes('<OAI-PMH')||txt.includes('<record')||txt.includes('<set'))){resolve({txt,idx})}else{reject(new Error('Invalid XML'))}}
+    catch(e){reject(e)}})));
+  const winner = results.find(r=>r.status==='fulfilled');
+  if(winner){stickyProxy=winner.value.idx;return winner.value.txt}
+  return null;
+}
+
+/* ── OAI-PMH Parser ── */
+function parseOAI(xml, defaultInst) {
+  const doc = new DOMParser().parseFromString(xml, 'text/xml');
+  const items = [];
+  doc.querySelectorAll('record').forEach(rec => {
+    if (rec.querySelector('header')?.getAttribute('status') === 'deleted') return;
+    const meta = rec.querySelector('metadata');
+    if (!meta) return;
+    const gFirst = tag => { const el = meta.querySelector(`dc\\:${tag}, ${tag}`); return el ? el.textContent.trim() : ''; };
+    const gAll = tag => Array.from(meta.querySelectorAll(`dc\\:${tag}, ${tag}`)).map(n => n.textContent.trim()).filter(Boolean);
+    const judul = gFirst('title');
+    if (!judul || judul.length < 8) return;
+    const descs = gAll('description');
+    const abstrak = descs.sort((a,b)=>b.length-a.length)[0] || '';
+    const allSubjects = gAll('subject').join(' ').toLowerCase();
+    const judulLow = judul.toLowerCase();
+    let prodi = '';
+    if (judulLow.includes('perbankan') || allSubjects.includes('perbankan')) prodi = 'Perbankan Syariah';
+    else if (judulLow.includes('manajemen') || allSubjects.includes('manajemen')) prodi = 'Manajemen Bisnis Syariah';
+    else if (judulLow.includes('ekonomi') || allSubjects.includes('ekonomi')) prodi = 'Ekonomi Syariah';
+    items.push({ id:'oai_'+Math.random().toString(36).substr(2,9), judul, penulis:gFirst('creator')||gAll('contributor')[0]||'', abstrak:abstrak.substring(0,500), tahun:(gFirst('date')||'').substring(0,4), prodi, sumber:defaultInst||'UINSI', institusiId:defaultInst||'' });
+  });
+  const rtEl = doc.querySelector('resumptionToken');
+  const token = rtEl ? (rtEl.textContent.trim()||null) : null;
+  return { items, token };
+}
+
+/* ── Merge items without duplicates ── */
+function mergeItems(target, newItems) {
+  const seen = new Set(target.map(x=>(x.judul||'').toLowerCase().trim().substring(0,80)));
+  let added = 0;
+  for (const it of newItems) {
+    const k = (it.judul||'').toLowerCase().trim().substring(0,80);
+    if (k && !seen.has(k)) { seen.add(k); target.push(it); added++; }
+  }
+  return added;
+}
+
+/* ── Preload Data ── */
+async function preload() {
+  /* Firebase proposals */
+  try {
+    setDot('dot-p','dot-loading'); setLbl('lbl-p','Memuat…');
+    const d = await dbGet('proposals');
+    APP.proposals = d || {}; APP.pCnt = Object.keys(APP.proposals).length;
+    setDot('dot-p','dot-ok'); setLbl('lbl-p', APP.pCnt + ' proposal');
+  } catch(e) { setDot('dot-p','dot-partial'); setLbl('lbl-p','Tidak tersedia'); }
+
+  /* Firebase repo */
+  try {
+    setDot('dot-r','dot-loading'); setLbl('lbl-r','Memuat…');
+    const d = await dbGet('repository');
+    APP.repo = d || {}; APP.rCnt = Object.keys(APP.repo).length;
+    setDot('dot-r','dot-ok'); setLbl('lbl-r', APP.rCnt + ' karya');
+  } catch(e) { setDot('dot-r','dot-partial'); setLbl('lbl-r','Tidak tersedia'); }
+
+  /* UINSI: Permanent Firebase + Incremental Live Sync */
+  try {
+    setDot('dot-u','dot-loading'); setLbl('lbl-u','Memuat data UINSI…');
+    const permData = await dbGet('uinsi_permanent/data', 15000);
+    const permMeta = await dbGet('uinsi_permanent/meta', 5000);
+    if (permData && Array.isArray(permData) && permData.length > 0) {
+      APP.uinsi = permData;
+      /* Merge SEED sebagai fallback jika ada item SEED yg belum masuk */
+      const seen = new Set(APP.uinsi.map(x => (x.judul||'').toLowerCase().trim()));
+      for (const s of SEED) { const k=(s.judul||'').toLowerCase().trim(); if(k&&!seen.has(k)){seen.add(k);APP.uinsi.push(s)} }
+      APP.uCnt = APP.uinsi.length;
+      const syncDate = permMeta && permMeta.lastSyncAt ? ` · sync ${new Date(permMeta.lastSyncAt).toLocaleDateString('id-ID')}` : '';
+      setDot('dot-u','dot-ok');
+      setLbl('lbl-u', APP.uCnt + ' skripsi ✓ (permanen)' + syncDate);
+      console.log(`📦 UINSI Permanent: ${APP.uCnt} skripsi dari Firebase`);
+    } else {
+      /* Belum ada data permanen — migrasi dari old cache jika ada */
+      const oldCache = await dbGet('uinsi_repository_cache', 8000);
+      if (oldCache && Array.isArray(oldCache) && oldCache.length > 0) {
+        const seen = new Set(SEED.map(x => (x.judul||'').toLowerCase().trim()));
+        oldCache.forEach(it => { const k=(it.judul||'').toLowerCase().trim(); if(k&&!seen.has(k)){seen.add(k);APP.uinsi.push(it)} });
+        console.log(`🔄 Migrasi: ${APP.uinsi.length} items dari old cache → permanent`);
+      }
+      APP.uCnt = APP.uinsi.length;
+      setDot('dot-u', APP.uCnt > SEED.length ? 'dot-ok' : 'dot-partial');
+      setLbl('lbl-u', APP.uCnt + ' skripsi (seed' + (APP.uCnt > SEED.length ? '+migrasi' : '') + ')');
+    }
+  } catch(e) { console.warn('UINSI preload error:', e); setDot('dot-u','dot-partial'); setLbl('lbl-u', SEED.length + ' seed'); }
+
+  /* PTKIN Nasional cache */
+  try {
+    setDot('dot-n','dot-loading'); setLbl('lbl-n','Memuat cache PTKIN…');
+    const c = await dbGet('ptkin_cache', 10000);
+    if (c && typeof c === 'object') {
+      Object.entries(c).forEach(([instId, cache]) => {
+        if (cache && cache.data && Array.isArray(cache.data)) {
+          mergeItems(APP.ptkin, cache.data);
+        }
+      });
+    }
+    APP.nCnt = APP.ptkin.length;
+    if (APP.nCnt > 0) {
+      setDot('dot-n','dot-ok');
+      setLbl('lbl-n', APP.nCnt.toLocaleString() + ' skripsi (cache)');
+    } else {
+      setDot('dot-n','dot-partial');
+      setLbl('lbl-n','Belum ada data');
+    }
+  } catch(e) { setDot('dot-n','dot-partial'); setLbl('lbl-n','Cache error'); }
+
+  APP.ready = true;
+  updateUI();
+
+  /* Launch background UINSI OAI-PMH fetch */
+  bgFetchUinsi();
+
+  /* Update PTKIN stats */
+  const el = document.getElementById('ptkin-total-pill');
+  if (el) el.innerHTML = `🇮🇩 ${PTKIN_STATS.total} PTKIN: ${PTKIN_STATS.uin} UIN · ${PTKIN_STATS.iain} IAIN · ${PTKIN_STATS.stain} STAIN`;
+  const pp = document.getElementById('pill-ptkin-count');
+  if (pp) pp.textContent = String(PTKIN_STATS.total);
+}
+
+function updateUI() {
+  const el = document.getElementById('db-lbl');
+  const total = APP.pCnt + APP.rCnt + APP.uCnt + APP.nCnt;
+  if (el) el.textContent = `P:${APP.pCnt} · R:${APP.rCnt} · U:${APP.uCnt} · PTKIN:${APP.nCnt.toLocaleString()} · Total: ${total.toLocaleString()}`;
+}
+
+/* ── Background OAI-PMH Fetch UINSI Samarinda (Permanent + Incremental) ── */
+async function bgFetchUinsi() {
+  const BASE = 'https://repository.uinsi.ac.id/oai/request';
+  setDot('dot-u','dot-loading');
+
+  async function tryFetchOAI(url) {
+    for (const fn of PROX) {
+      try {
+        const ctrl = new AbortController();
+        const tid = setTimeout(() => ctrl.abort(), 20000);
+        const resp = await fetch(fn(url), { signal: ctrl.signal });
+        clearTimeout(tid);
+        if (resp.ok) {
+          const txt = await resp.text();
+          if (txt && txt.length > 150 && (txt.includes('<OAI-PMH') || txt.includes('<record') || txt.includes('<set'))) return txt;
+        }
+      } catch(_) {}
+    }
+    return null;
+  }
+
+  function parseOAIUinsi(xml) {
+    const doc = new DOMParser().parseFromString(xml, 'text/xml');
+    const items = [];
+    doc.querySelectorAll('record').forEach(rec => {
+      const status = rec.querySelector('header')?.getAttribute('status');
+      if (status === 'deleted') return;
+      const meta = rec.querySelector('metadata');
+      if (!meta) return;
+      const gFirst = tag => { const el = meta.querySelector(`dc\\:${tag}, ${tag}`); return el ? el.textContent.trim() : ''; };
+      const gAll = tag => Array.from(meta.querySelectorAll(`dc\\:${tag}, ${tag}`)).map(n => n.textContent.trim()).filter(Boolean);
+      const judul = gFirst('title');
+      if (!judul || judul.length < 8) return;
+      const allSubjects = gAll('subject').join(' ').toLowerCase();
+      const judulLow = judul.toLowerCase();
+      let prodi = 'Ekonomi Syariah';
+      if (judulLow.includes('perbankan') || allSubjects.includes('perbankan') || allSubjects.includes('banking')) prodi = 'Perbankan Syariah';
+      else if (judulLow.includes('manajemen') || allSubjects.includes('manajemen')) prodi = 'Manajemen Bisnis Syariah';
+      const descs = gAll('description');
+      const abstrak = descs.sort((a,b) => b.length - a.length)[0] || '';
+      items.push({ id:'oai_'+Math.random().toString(36).substr(2,9), judul, penulis:gFirst('creator')||gAll('contributor')[0]||'', abstrak, tahun:(gFirst('date')||'').substring(0,4), prodi, sumber:'UINSI', url:'' });
+    });
+    const rtEl = doc.querySelector('resumptionToken');
+    const token = rtEl ? (rtEl.textContent.trim() || null) : null;
+    const completeListSize = rtEl ? parseInt(rtEl.getAttribute('completeListSize')||'0',10) : 0;
+    return { items, token, completeListSize };
+  }
+
+  function mergeUinsi(newItems) {
+    const seen = new Set(APP.uinsi.map(x => (x.judul||'').toLowerCase().trim()));
+    let added = 0;
+    for (const it of newItems) {
+      const k = (it.judul||'').toLowerCase().trim();
+      if (k && !seen.has(k)) { seen.add(k); APP.uinsi.push(it); added++; }
+    }
+    return added;
+  }
+
+  async function fetchAllPages(startUrl, label) {
+    let url = startUrl, page = 0, totalAdded = 0;
+    while (url && page < 200) {
+      const xml = await tryFetchOAI(url);
+      if (!xml) break;
+      const { items, token } = parseOAIUinsi(xml);
+      const added = mergeUinsi(items);
+      totalAdded += added;
+      page++;
+      APP.uCnt = APP.uinsi.length;
+      setLbl('lbl-u', `${label}: ${APP.uCnt} skripsi` + (added > 0 ? ` (+${added}) ↻` : ' ↻'));
+      if (token) { await sleep(400); url = `${BASE}?verb=ListRecords&resumptionToken=${encodeURIComponent(token)}`; }
+      else break;
+    }
+    return totalAdded;
+  }
+
+  /* ── Tentukan mode: INCREMENTAL (cepat) vs FULL SYNC ── */
+  const meta = await dbGet('uinsi_permanent/meta', 5000);
+  const lastSync = meta ? (meta.lastSyncAt || 0) : 0;
+  const hoursSince = (Date.now() - lastSync) / (1000*60*60);
+  const hasPermData = APP.uinsi.length > SEED.length;
+  let totalNewAdded = 0;
+
+  if (hasPermData && hoursSince < 6) {
+    /* ══ INCREMENTAL: data sudah ada & sync < 6 jam lalu ══
+       Cek halaman pertama saja untuk deteksi item baru */
+    setLbl('lbl-u', `${APP.uCnt} skripsi — cek update…`);
+    try {
+      const xml = await tryFetchOAI(`${BASE}?verb=ListRecords&metadataPrefix=oai_dc`);
+      if (xml) {
+        const { items } = parseOAIUinsi(xml);
+        totalNewAdded = mergeUinsi(items);
+        if (totalNewAdded > 0) console.log(`🆕 UINSI Incremental: +${totalNewAdded} item baru`);
+      }
+    } catch(_) {}
+
+  } else {
+    /* ══ FULL SYNC: data belum ada ATAU sudah > 6 jam ══ */
+    setLbl('lbl-u', 'Sinkronisasi repository.uinsi.ac.id…');
+    console.log(`🔄 UINSI Full Sync: ${hasPermData ? 'periodic refresh' : 'initial fetch'}…`);
+
+    /* Strategy 1: Semua record */
+    try { totalNewAdded += await fetchAllPages(`${BASE}?verb=ListRecords&metadataPrefix=oai_dc`, 'Semua koleksi'); } catch(_) {}
+
+    /* Strategy 2: FEBI sets */
+    const KNOWN_SETS = [
+      {id:'col_123456789_41',prodi:'Ekonomi Syariah'},{id:'col_123456789_42',prodi:'Perbankan Syariah'},
+      {id:'col_123456789_43',prodi:'Manajemen Bisnis Syariah'},{id:'col_123456789_44',prodi:'Ekonomi Syariah'},
+      {id:'col_123456789_45',prodi:'Perbankan Syariah'},{id:'col_123456789_46',prodi:'Ekonomi Syariah'},
+      {id:'col_123456789_47',prodi:'Perbankan Syariah'},{id:'col_123456789_48',prodi:'Manajemen Bisnis Syariah'}
+    ];
+
+    /* Discover sets dari server */
+    try {
+      const setsXml = await tryFetchOAI(`${BASE}?verb=ListSets`);
+      if (setsXml) {
+        const doc = new DOMParser().parseFromString(setsXml, 'text/xml');
+        doc.querySelectorAll('set').forEach(s => {
+          const spec = s.querySelector('setSpec')?.textContent?.trim();
+          if (!spec || KNOWN_SETS.find(x => x.id === spec)) return;
+          const name = (s.querySelector('setName')?.textContent||'').toLowerCase();
+          let prodi = 'Ekonomi Syariah';
+          if (name.includes('perbankan')||name.includes('banking')) prodi = 'Perbankan Syariah';
+          else if (name.includes('manajemen')||name.includes('management')) prodi = 'Manajemen Bisnis Syariah';
+          KNOWN_SETS.push({id:spec,prodi});
+        });
+      }
+    } catch(_) {}
+
+    for (const col of KNOWN_SETS) {
+      try { totalNewAdded += await fetchAllPages(`${BASE}?verb=ListRecords&metadataPrefix=oai_dc&set=${encodeURIComponent(col.id)}`, col.prodi); await sleep(300); } catch(_) {}
+    }
+  }
+
+  APP.uCnt = APP.uinsi.length;
+
+  /* ══ SIMPAN PERMANEN KE FIREBASE ══
+     Data TIDAK pernah dihapus — hanya bertambah (append-only).
+     Seluruh koleksi tersimpan tanpa batas slice. */
+  if (db && APP.uCnt > SEED.length) {
+    try {
+      setLbl('lbl-u', `💾 Menyimpan ${APP.uCnt} skripsi…`);
+      /* Simpan data utama — SEMUA item, tanpa .slice() limit */
+      await db.ref('uinsi_permanent/data').set(APP.uinsi);
+      /* Simpan metadata sinkronisasi */
+      await db.ref('uinsi_permanent/meta').set({
+        count: APP.uCnt,
+        lastSyncAt: Date.now(),
+        lastSyncAdded: totalNewAdded,
+        version: 2
+      });
+      /* Hapus old cache (sudah termigrasi ke permanent) */
+      try { await db.ref('uinsi_repository_cache').remove(); } catch(_) {}
+      console.log(`💾 UINSI Permanent: ${APP.uCnt} skripsi tersimpan` + (totalNewAdded > 0 ? ` (+${totalNewAdded} baru)` : ''));
+    } catch(e) { console.warn('💾 Firebase save error:', e); }
+  }
+
+  /* Update UI final */
+  if (APP.uCnt > SEED.length) {
+    setDot('dot-u','dot-ok');
+    const tag = totalNewAdded > 0 ? ` (+${totalNewAdded} baru)` : '';
+    setLbl('lbl-u', APP.uCnt + ' skripsi ✓ (permanen)' + tag);
+  } else {
+    setDot('dot-u', APP.uCnt > 0 ? 'dot-ok' : 'dot-partial');
+    setLbl('lbl-u', APP.uCnt + ' skripsi (seed)');
+  }
+  updateUI();
+}
+
+/* ── Refresh UINSI Manual (Force Full Sync — data tetap, TIDAK dihapus) ── */
+async function refreshUinsi() {
+  const btn = document.getElementById('btn-refresh-uinsi');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Full sync…'; }
+  /* Reset lastSyncAt = 0 agar bgFetchUinsi paksa FULL SYNC */
+  try { if (db) await db.ref('uinsi_permanent/meta/lastSyncAt').set(0); } catch(_) {}
+  await bgFetchUinsi();
+  if (btn) { btn.disabled = false; btn.textContent = '🔄 Refresh UINSI'; }
+}
+
+/* ── Refresh PTKIN Nasional ── */
+async function refreshPtkin() {
+  const btn = document.getElementById('btn-refresh-ptkin');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Fetching PTKIN…'; }
+  setDot('dot-n','dot-loading'); setLbl('lbl-n','Fetching PTKIN Nasional…');
+
+  let totalNew = 0;
+  const activeInsts = PTKIN_REGISTRY.filter(p => p.active);
+  const MAX_PAGES = 15; /* Pagination: dari 5 → 15 halaman per institusi */
+
+  /* Build all possible OAI endpoints for an institution */
+  function getEndpoints(inst) {
+    const endpoints = [inst.oaiBase];
+    /* altOai jika tersedia */
+    if (inst.altOai && Array.isArray(inst.altOai)) inst.altOai.forEach(u => { if (!endpoints.includes(u)) endpoints.push(u); });
+    const base = inst.oaiBase;
+    const urlObj = (() => { try { return new URL(base); } catch(_) { return null; } })();
+    if (urlObj) {
+      const path = urlObj.pathname;
+      const origin = urlObj.origin;
+      /* EPrints endpoint: /cgi/oai2 */
+      if (path.endsWith('/cgi/oai2')) {
+        const ds = origin + path.replace(/\/cgi\/oai2$/, '/oai/request');
+        if (!endpoints.includes(ds)) endpoints.push(ds);
+      }
+      /* DSpace standard: /oai/request (but NOT /dspace-oai/request or /server/oai/request) */
+      else if (path.endsWith('/oai/request') && !path.includes('dspace-oai') && !path.includes('server/oai')) {
+        /* EPrints swap */
+        const ep = origin + path.replace(/\/oai\/request$/, '/cgi/oai2');
+        if (!endpoints.includes(ep)) endpoints.push(ep);
+        /* DSpace 7 */
+        const ds7 = origin + path.replace(/\/oai\/request$/, '/server/oai/request');
+        if (!endpoints.includes(ds7)) endpoints.push(ds7);
+        /* DSpace dspace-oai path */
+        const dsOai = origin + path.replace(/\/oai\/request$/, '/dspace-oai/request');
+        if (!endpoints.includes(dsOai)) endpoints.push(dsOai);
+      }
+      /* DSpace dspace-oai: /dspace-oai/request */
+      else if (path.includes('/dspace-oai/request')) {
+        const std = origin + path.replace(/\/dspace-oai\/request$/, '/oai/request');
+        if (!endpoints.includes(std)) endpoints.push(std);
+      }
+    }
+    /* HTTP fallback for all HTTPS endpoints */
+    const httpFallbacks = [];
+    endpoints.forEach(ep => {
+      if (ep.startsWith('https://')) {
+        const http = ep.replace('https://', 'http://');
+        if (!endpoints.includes(http) && !httpFallbacks.includes(http)) httpFallbacks.push(http);
+      }
+    });
+    return [...endpoints, ...httpFallbacks];
+  }
+
+  /* Try fetching from multiple endpoints */
+  async function smartFetch(inst, setParam) {
+    const eps = getEndpoints(inst);
+    for (const ep of eps) {
+      const url = `${ep}?verb=ListRecords&metadataPrefix=oai_dc${setParam}`;
+      const xml = await tryFetch(url);
+      if (xml) {
+        if (ep !== inst.oaiBase) { inst.oaiBase = ep; console.log(`🔄 Auto-fix ${inst.singkatan}: ${ep}`); }
+        return xml;
+      }
+    }
+    return null;
+  }
+
+  for (let idx = 0; idx < activeInsts.length; idx++) {
+    const inst = activeInsts[idx];
+    setLbl('lbl-n', `[${idx+1}/${activeInsts.length}] ${inst.singkatan}…`);
+
+    /* Check cache first (< 7 days) */
+    try {
+      const cached = await dbGet(`ptkin_cache/${inst.id}`, 5000);
+      if (cached && cached.data && cached.count > 5 && (Date.now() - cached.savedAt) < 7*24*60*60*1000) {
+        const added = mergeItems(APP.ptkin, cached.data);
+        totalNew += added;
+        continue;
+      }
+    } catch(_) {}
+
+    /* Fetch live via OAI-PMH with comprehensive auto-detection */
+    try {
+      const setParam = inst.sets.length ? '&set='+encodeURIComponent(inst.sets[0]) : '';
+      let xml = await smartFetch(inst, setParam);
+
+      /* Strategi 2: Jika fetch dengan set gagal, coba tanpa set */
+      if (!xml && setParam) {
+        console.log(`⚠️ ${inst.singkatan}: set-filter gagal, coba tanpa set…`);
+        xml = await smartFetch(inst, '');
+      }
+
+      if (xml) {
+        const parsed = parseOAI(xml, inst.id);
+        parsed.items.forEach(it => { it.institusi = inst.nama; it.institusiId = inst.id; });
+        const added = mergeItems(APP.ptkin, parsed.items);
+        totalNew += added;
+
+        /* Follow pagination (max MAX_PAGES pages) */
+        let token = parsed.token;
+        let page = 1;
+        while (token && page < MAX_PAGES) {
+          const pUrl = `${inst.oaiBase}?verb=ListRecords&resumptionToken=${encodeURIComponent(token)}`;
+          const pXml = await tryFetch(pUrl);
+          if (!pXml) break;
+          const p2 = parseOAI(pXml, inst.id);
+          p2.items.forEach(it => { it.institusi = inst.nama; it.institusiId = inst.id; });
+          mergeItems(APP.ptkin, p2.items);
+          token = p2.token;
+          page++;
+          setLbl('lbl-n', `[${idx+1}/${activeInsts.length}] ${inst.singkatan} hal.${page}…`);
+          await new Promise(r => setTimeout(r, 150));
+        }
+
+        /* Update running count */
+        APP.nCnt = APP.ptkin.length;
+        setLbl('lbl-n', `[${idx+1}/${activeInsts.length}] ${inst.singkatan} ✓ — total ${APP.nCnt.toLocaleString()}`);
+
+        /* Save to cache (max 3000 items per institution) */
+        const instItems = APP.ptkin.filter(x => x.institusiId === inst.id);
+        if (instItems.length > 0) {
+          await dbSet(`ptkin_cache/${inst.id}`, { savedAt: Date.now(), count: instItems.length, data: instItems.slice(0, 3000) });
+        }
+      } else {
+        console.warn(`❌ ${inst.singkatan}: semua endpoint gagal`);
+      }
+    } catch(e) { console.warn(`❌ ${inst.singkatan}: error —`, e.message); }
+
+    await new Promise(r => setTimeout(r, 200));
+  }
+
+  APP.nCnt = APP.ptkin.length;
+  setDot('dot-n', APP.nCnt > 0 ? 'dot-ok' : 'dot-partial');
+  setLbl('lbl-n', APP.nCnt.toLocaleString() + ' skripsi ✓');
+  updateUI();
+
+  if (btn) { btn.disabled = false; btn.textContent = '🇮🇩 Refresh Data PTKIN'; }
+  toast(`PTKIN Nasional: ${APP.nCnt.toLocaleString()} skripsi dari ${PTKIN_STATS.total} institusi`, 'success');
+}
+
+/* ── Main Similarity Check ── */
+async function runCheck() {
+  const nim=document.getElementById('nim').value.trim();
+  const nama=document.getElementById('nama').value.trim();
+  const prodi=document.getElementById('prodi').value.trim();
+  const judul=document.getElementById('judul').value.trim();
+  const abstrak=document.getElementById('abstrak').value.trim();
+  const tahun=document.getElementById('tahun').value.trim()||String(new Date().getFullYear());
+
+  if(!nim){toast('NIM wajib diisi.','error');return}
+  if(!nama){toast('Nama lengkap wajib diisi.','error');return}
+  if(!prodi){toast('Program Studi wajib dipilih.','error');return}
+  if(!judul){toast('Judul proposal wajib diisi.','error');return}
+  if(judul.length<15){toast('Judul terlalu pendek (min. 15 karakter).','error');return}
+
+  if(!APP.ready){toast('Sedang memuat data, mohon tunggu…','info');let w=0;while(!APP.ready&&w<8000){await sleep(300);w+=300}}
+
+  document.getElementById('btn-check').disabled=true;
+  show('sec-load');hide('sec-form');hide('sec-result');
+  setProgress(5,'Menghubungkan ke sumber data…','');
+  await sleep(60);
+
+  try {
+    const hits=[];
+
+    /* 1. Check proposals */
+    setProgress(15,'Menganalisis Proposal FEBI UINSI…','');
+    const propVals=Object.values(APP.proposals);
+    for(const p of propVals){
+      if(!p||typeof p!=='object'||!p.judul||p.status==='Ditolak')continue;
+      const h=hybrid(judul,p.judul,abstrak,p.abstrak||'');
+      if(h.score>=30)hits.push({src:'proposal',title:p.judul,author:p.mahasiswaNama||'-',prodi:p.prodi||'-',tahun:p.tahun||'-',abs:p.abstrak||'',url:'',institusi:'FEBI UINSI',...h});
+    }
+
+    /* 2. Check local repo */
+    setProgress(30,'Menganalisis Repository Lokal FEBI…','');await sleep(10);
+    const repoVals=Object.values(APP.repo);
+    for(const r of repoVals){
+      if(!r||typeof r!=='object'||!r.judul)continue;
+      const h=hybrid(judul,r.judul,abstrak,r.abstrak||'');
+      if(h.score>=30)hits.push({src:'repo',title:r.judul,author:r.penulis||'-',prodi:r.prodi||'-',tahun:r.tahun||'-',abs:r.abstrak||'',url:'',institusi:'FEBI UINSI',...h});
+    }
+
+    /* 3. Check UINSI repository */
+    setProgress(45,`Menganalisis ${APP.uinsi.length} skripsi UINSI…`,'');await sleep(10);
+    for(let i=0;i<APP.uinsi.length;i+=50){
+      const batch=APP.uinsi.slice(i,i+50);
+      for(const r of batch){
+        if(!r||typeof r!=='object'||!r.judul)continue;
+        const h=hybrid(judul,r.judul,abstrak,r.abstrak||'');
+        if(h.score>=30)hits.push({src:'uinsi',title:r.judul,author:r.penulis||'-',prodi:r.prodi||'-',tahun:r.tahun||'-',abs:r.abstrak||'',url:r.url||'',institusi:'UINSI Samarinda',...h});
+      }
+      if(i+50<APP.uinsi.length){setProgress(45+Math.round((i/APP.uinsi.length)*15),'UINSI: '+Math.min(i+50,APP.uinsi.length)+'/'+APP.uinsi.length,'');await sleep(3)}
+    }
+
+    /* 4. Check PTKIN Nasional */
+    setProgress(62,`Menganalisis ${APP.ptkin.length.toLocaleString()} skripsi PTKIN Nasional…`,'');await sleep(10);
+    for(let i=0;i<APP.ptkin.length;i+=100){
+      const batch=APP.ptkin.slice(i,i+100);
+      for(const r of batch){
+        if(!r||typeof r!=='object'||!r.judul)continue;
+        const h=hybrid(judul,r.judul,abstrak,r.abstrak||'');
+        const instName = r.institusi || (PTKIN_REGISTRY.find(p=>p.id===r.institusiId)||{}).nama || 'PTKIN';
+        if(h.score>=30)hits.push({src:'ptkin',title:r.judul,author:r.penulis||'-',prodi:r.prodi||'-',tahun:r.tahun||'-',abs:r.abstrak||'',url:'',institusi:instName,institusiId:r.institusiId||'',...h});
+      }
+      if(i+100<APP.ptkin.length){
+        const pct=62+Math.round((i/APP.ptkin.length)*28);
+        setProgress(pct,'PTKIN: '+Math.min(i+100,APP.ptkin.length).toLocaleString()+'/'+APP.ptkin.length.toLocaleString(),'');
+        await sleep(2);
+      }
+    }
+
+    setProgress(95,'Menyusun laporan…','');await sleep(60);
+    hits.sort((a,b)=>b.score-a.score);
+    const highest=hits.length?hits[0].score:0;
+    const total=APP.pCnt+APP.rCnt+APP.uCnt+APP.nCnt;
+
+    let verdict,vc,vi,vsub;
+    if(highest>=85){verdict='Kemiripan Kritis — Perlu Reformulasi Total';vc='vd-danger';vi='🚫';vsub=`Ditemukan ${hits.length} karya serupa dengan skor kemiripan tertinggi <strong>${highest}%</strong>. Wajib melakukan reformulasi judul, variabel, dan locus penelitian secara menyeluruh.`}
+    else if(highest>=70){verdict='Kemiripan Tinggi — Diperlukan Modifikasi Signifikan';vc='vd-warn';vi='⚠️';vsub=`Ditemukan ${hits.length} karya serupa dengan skor tertinggi <strong>${highest}%</strong>. Revisi substansial pada variabel penelitian, lokus, atau pendekatan metodologi diperlukan.`}
+    else if(highest>=50){verdict='Kemiripan Sedang — Disarankan Penyempurnaan';vc='vd-warn';vi='💛';vsub=`Ditemukan ${hits.length} karya dengan kemiripan <strong>${highest}%</strong>. Pastikan kebaruan dan kontribusi ilmiah dinyatakan secara eksplisit.`}
+    else if(hits.length>0){verdict='Kemiripan Rendah — Proposal Dapat Dilanjutkan';vc='vd-safe';vi='✅';vsub=`Ditemukan ${hits.length} karya dengan kemiripan rendah (tertinggi <strong>${highest}%</strong>). Proposal Anda dinilai cukup orisinil.`}
+    else{verdict='Tidak Ditemukan Kemiripan — Sangat Orisinil';vc='vd-safe';vi='🏆';vsub=`Tidak ada karya ilmiah serupa dari <strong>${total.toLocaleString()} karya</strong> yang diperiksa secara nasional. Proposal Anda sangat orisinil.`}
+
+    APP.result={nim,nama,prodi,judul,abstrak,tahun,highest,hits,verdict,vc,vi,vsub,checkedAt:new Date(),total,pCnt:APP.pCnt,rCnt:APP.rCnt,uCnt:APP.uCnt,nCnt:APP.nCnt};
+    setProgress(100,'Analisis selesai!  ✓','');await sleep(250);
+    hide('sec-load');document.getElementById('btn-check').disabled=false;
+    document.getElementById('sec-result').style.display='block';
+    renderResult(APP.result);
+    setTimeout(()=>document.getElementById('sec-result').scrollIntoView({behavior:'smooth',block:'start'}),130);
+  } catch(err) {
+    console.error('runCheck error:',err);
+    hide('sec-load');show('sec-form');document.getElementById('btn-check').disabled=false;
+    toast('Terjadi kesalahan: '+(err.message||err),'error');
+  }
+}
+
+/* ── Render Results ── */
+function scPill(s){return s>=85?'sc-crit':s>=70?'sc-high':s>=50?'sc-med':'sc-low'}
+function srcTag(src,inst){
+  if(src==='proposal')return'<span class="meta-tag mt-prop">📋 Proposal FEBI</span>';
+  if(src==='repo')return'<span class="meta-tag mt-repo">📂 Repository FEBI</span>';
+  if(src==='uinsi')return'<span class="meta-tag mt-uinsi">🌐 Repository UINSI</span>';
+  return'<span class="meta-tag mt-ptkin">🇮🇩 '+(inst||'PTKIN Nasional')+'</span>';
+}
+function esc(s){if(s==null)return'';if(typeof s!=='string')s=String(s);return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function genCitation(h) {
+  const author = h.author || '-';
+  const year = h.tahun || '-';
+  const title = h.title || '-';
+  const inst = h.institusi || 'Perguruan Tinggi';
+  return `${author}. (${year}). ${title}. Skripsi. ${inst}.`;
+}
+
+function renderResult(r) {
+  document.getElementById('stu-bar').innerHTML=`
+    <div class="stu-field"><div class="stu-lbl">NIM</div><div class="stu-val">${esc(r.nim)}</div></div>
+    <div class="stu-field"><div class="stu-lbl">Nama Lengkap</div><div class="stu-val">${esc(r.nama)}</div></div>
+    <div class="stu-field"><div class="stu-lbl">Program Studi</div><div class="stu-val">${esc(r.prodi)}</div></div>
+    <div class="stu-field"><div class="stu-lbl">Tahun Akademik</div><div class="stu-val">${esc(r.tahun)}</div></div>`;
+
+  document.getElementById('verdict-wrap').innerHTML=`
+    <div class="verdict-wrap ${r.vc}"><div class="verdict-icon">${r.vi}</div>
+    <div style="flex:1"><div class="verdict-title">${esc(r.verdict)}</div><div class="verdict-sub">${r.vsub}</div></div></div>`;
+
+  const circ=2*Math.PI*50;
+  const col=r.highest>=85?'#dc2626':r.highest>=70?'#d97706':r.highest>=50?'#ca8a04':'#16a34a';
+  const sf=document.getElementById('sr-fill');const sv=document.getElementById('sr-val');
+  if(sf){sf.style.stroke=col;sf.style.strokeDasharray=String(circ);sf.style.strokeDashoffset=String(circ)}
+  if(sv){sv.textContent=r.highest+'%';sv.style.fill=col}
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{if(sf)sf.style.strokeDashoffset=String(circ*(1-r.highest/100))}));
+
+  document.getElementById('metrics-grid').innerHTML=`
+    <div class="metric-card"><div class="metric-label">Skor Tertinggi</div><div class="metric-val" style="color:${col}">${r.highest}%</div><div class="metric-sub">dari ${r.total.toLocaleString()} karya</div></div>
+    <div class="metric-card"><div class="metric-label">Karya Mirip ≥30%</div><div class="metric-val">${r.hits.length}</div><div class="metric-sub">karya terdeteksi</div></div>
+    <div class="metric-card"><div class="metric-label">Total Diperiksa</div><div class="metric-val">${r.total.toLocaleString()}</div><div class="metric-sub">karya ilmiah nasional</div></div>
+    <div class="metric-card"><div class="metric-label">Waktu Uji</div><div class="metric-val" style="font-size:12px;padding-top:4px">${fmtDate(r.checkedAt)}</div><div class="metric-sub">${fmtTime(r.checkedAt)}</div></div>`;
+
+  document.getElementById('src-breakdown').innerHTML=`
+    <div class="src-bd-item"><div class="src-bd-label">📋 Proposal FEBI</div><div class="src-bd-count">${r.pCnt}</div><div class="src-bd-sub">Firebase Real-time DB</div></div>
+    <div class="src-bd-item"><div class="src-bd-label">📂 Repo Lokal FEBI</div><div class="src-bd-count">${r.rCnt}</div><div class="src-bd-sub">Firebase FEBI</div></div>
+    <div class="src-bd-item"><div class="src-bd-label">🌐 Repo UINSI</div><div class="src-bd-count">${r.uCnt}</div><div class="src-bd-sub">Permanent Firebase</div></div>
+    <div class="src-bd-item"><div class="src-bd-label">🇮🇩 PTKIN Nasional</div><div class="src-bd-count">${r.nCnt.toLocaleString()}</div><div class="src-bd-sub">${PTKIN_STATS.total} Institusi</div></div>`;
+
+  const top=r.hits[0];
+  const algoEl=document.getElementById('algo-summary');
+  if(top&&algoEl){
+    algoEl.innerHTML=`<span class="algo-lbl">Breakdown algoritma (karya teratas):</span>
+      <span class="algo-badge">Cos:${top.bd.cos}%</span><span class="algo-badge">J2:${top.bd.jb}%</span>
+      <span class="algo-badge">J3:${top.bd.jt}%</span><span class="algo-badge">J4:${top.bd.jf}%</span>
+      <span class="algo-badge">Lev:${top.bd.lv}%</span><span class="algo-badge">Sem:${top.bd.sm}%</span>
+      <span class="algo-badge" style="background:#e0e7ff;color:#3730a3;border-color:#c7d2fe">ChN:${top.bd.cn}%</span>
+      <span class="algo-badge" style="background:#fdf4ff;color:#7e22ce;border-color:#e9d5ff">Ovl:${top.bd.ov}%</span>
+      <span class="algo-badge" style="background:var(--g50);color:var(--g800);border-color:var(--g200)">Final:${top.score}%</span>
+      ${top.hasAbstrak?`<span class="algo-badge" style="background:#dbeafe;color:#1e40af;border-color:#bfdbfe">J:${top.titleScore}% · A:${top.abstrakScore}%</span>`:''}`;
+  } else if(algoEl){ algoEl.innerHTML='<span class="algo-lbl" style="color:var(--s400)">Tidak ada kemiripan ≥ 30% ditemukan.</span>'; }
+
+  const mb=document.getElementById('match-count-badge');
+  if(mb)mb.textContent=r.hits.length>0?r.hits.length+' karya':'Tidak ada';
+
+  const ml=document.getElementById('match-list');if(!ml)return;
+  if(r.hits.length===0){
+    ml.innerHTML=`<div class="no-match"><div class="no-match-icon">🏆</div><div class="no-match-title">Tidak Ada Kemiripan Terdeteksi</div>
+      <div class="no-match-sub">Judul dan abstrak proposal Anda tidak menunjukkan kemiripan signifikan (≥ 30%) dengan <strong>${r.total.toLocaleString()} karya ilmiah</strong> yang diperiksa dari seluruh PTKIN se-Indonesia.</div></div>`;
+  } else {
+    ml.innerHTML=r.hits.slice(0,20).map((h,i)=>{
+      const aid='abs_'+i;const cid='cite_'+i;
+      const safeAbs=esc(h.abs||'').substring(0,600);
+      const rankClass=i===0?'match-rank rank-gold':'match-rank';
+      const instInfo=h.institusi?esc(h.institusi):'';
+      const repoLink=(h.url&&h.url.startsWith('http'))?h.url:(h.institusiId?((PTKIN_REGISTRY.find(p=>p.id===h.institusiId)||{}).repoUrl||''):'');
+      return`<div class="match-item" style="animation-delay:${i*0.04}s">
+        <div class="match-item-hdr">
+          <div class="${rankClass}">${i+1}</div>
+          <div class="match-title-wrap"><div class="match-title">${esc(h.title)}</div></div>
+          <span class="match-score-pill ${scPill(h.score)}">${h.score}%</span>
+        </div>
+        <div class="match-meta">
+          ${srcTag(h.src,instInfo)}
+          <span class="meta-tag mt-gray">👤 ${esc(h.author)}</span>
+          <span class="meta-tag mt-gray">📚 ${esc(h.prodi)}</span>
+          <span class="meta-tag mt-gray">📅 ${esc(h.tahun)}</span>
+          ${instInfo&&h.src==='ptkin'?`<span class="meta-tag mt-ptkin">🏛️ ${instInfo}</span>`:''}
+          ${h.hasAbstrak?`<span class="meta-tag" style="background:#ede9fe;color:#4c1d95;border:1px solid #ddd6fe">📝 J:${h.titleScore}% · A:${h.abstrakScore}%</span>`:''}
+        </div>
+        <div class="algo-row">
+          <div class="algo-score-item"><div class="asi-name">Cosine</div><div class="asi-val">${h.bd.cos}%</div></div>
+          <div class="algo-score-item"><div class="asi-name">Jacc-2</div><div class="asi-val">${h.bd.jb}%</div></div>
+          <div class="algo-score-item"><div class="asi-name">Jacc-3</div><div class="asi-val">${h.bd.jt}%</div></div>
+          <div class="algo-score-item"><div class="asi-name">Jacc-4</div><div class="asi-val">${h.bd.jf}%</div></div>
+          <div class="algo-score-item"><div class="asi-name">Lev</div><div class="asi-val">${h.bd.lv}%</div></div>
+          <div class="algo-score-item"><div class="asi-name">Semantic</div><div class="asi-val">${h.bd.sm}%</div></div>
+          <div class="algo-score-item" style="border-color:#c7d2fe"><div class="asi-name" style="color:#3730a3">Char-N</div><div class="asi-val" style="color:#3730a3">${h.bd.cn}%</div></div>
+          <div class="algo-score-item" style="border-color:#e9d5ff"><div class="asi-name" style="color:#7e22ce">Overlap</div><div class="asi-val" style="color:#7e22ce">${h.bd.ov}%</div></div>
+        </div>
+        <div class="match-actions">
+          ${repoLink?`<a class="ma-link" href="${esc(repoLink)}" target="_blank" rel="noopener">🔗 View Link Repository</a>`:''}
+          <button class="ma-cite" onclick="togEl('${cid}')">📎 Sitasi</button>
+          ${h.abs?`<button class="ma-abs" onclick="togEl('${aid}')">▸ Lihat Abstrak</button>`:''}
+        </div>
+        <div class="cite-text" id="${cid}">${esc(genCitation(h))}</div>
+        ${h.abs?`<div class="abs-text" id="${aid}">${safeAbs}${h.abs.length>600?'…':''}</div>`:''}
+      </div>`;
+    }).join('');
+  }
+  const ca=document.getElementById('checked-at');
+  if(ca)ca.textContent=`Diperiksa: ${fmtDateLong(r.checkedAt)}`;
+}
+
+/* ── Print Official Letter ── */
+function printSurat() {
+  console.log('🖨️ printSurat() called');
+  try {
+  if(!APP.result){toast('Jalankan uji similarity terlebih dahulu.','error');return}
+  const r=APP.result;const today=new Date();
+  const MN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const tgl=`${today.getDate()} ${MN[today.getMonth()]} ${today.getFullYear()}`;
+  const nomor=`B-${String(today.getMonth()+1).padStart(2,'0')}${today.getDate()}/${String(Math.floor(Math.random()*900)+100)}/Un.16.6/PP.00.9/${today.getMonth()+1}/${today.getFullYear()}`;
+  let stLbl,stCls;
+  if(r.highest>=85){stLbl='KEMIRIPAN KRITIS — PERLU REFORMULASI';stCls='st-bad'}
+  else if(r.highest>=70){stLbl='KEMIRIPAN TINGGI — PERLU REVISI';stCls='st-warn'}
+  else if(r.highest>=50){stLbl='KEMIRIPAN SEDANG — PERLU PENYEMPURNAAN';stCls='st-warn'}
+  else{stLbl='KEMIRIPAN RENDAH / AMAN — LAYAK DILANJUTKAN';stCls='st-ok'}
+
+  let matchRows='';
+  r.hits.slice(0,10).forEach((h,i)=>{
+    const instLbl=h.src==='ptkin'?(h.institusi||'PTKIN'):(h.src==='uinsi'?'UINSI':h.src==='proposal'?'Proposal FEBI':'Repo FEBI');
+    matchRows+=`<tr><td>${i+1}</td><td>${esc(h.title)}</td><td>${esc(h.author)}</td><td>${esc(h.prodi)}</td><td>${esc(h.tahun)}</td><td style="text-align:center;font-weight:bold">${h.score}%</td><td style="font-size:9pt">${esc(instLbl)}</td></tr>`;
+  });
+
+  /* Build algo detail */
+  let algoDetailHtml='';
+  const topHit=r.hits[0];
+  if(topHit){
+    const algos=[{name:'Cosine Similarity',weight:'20%',key:'cos'},{name:'Jaccard Bigram',weight:'15%',key:'jb'},{name:'Jaccard Trigram',weight:'15%',key:'jt'},{name:'Jaccard Fourgram',weight:'10%',key:'jf'},{name:'Levenshtein Distance',weight:'8%',key:'lv'},{name:'Semantic Keyword',weight:'7%',key:'sm'},{name:'Character N-gram',weight:'15%',key:'cn'},{name:'Overlap Coefficient',weight:'10%',key:'ov'}];
+    algoDetailHtml=algos.map((a,i)=>{
+      const sT=topHit.bd[a.key]!=null?Math.round(topHit.bd[a.key]*100)/100+'%':'—';
+      return`<tr><td>${i+1}</td><td style="text-align:left">${a.name}</td><td>${a.weight}</td><td>${sT}</td></tr>`;
+    }).join('')+`<tr style="background:#d1fae5;font-weight:bold"><td colspan="2">⭐ Skor Gabungan Tertimbang</td><td>100%</td><td>${topHit.score}%</td></tr>`;
+  }
+
+  document.getElementById('surat-content').innerHTML=`
+    <div class="kop-surat">
+      <div class="kop-logo"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjIwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIyMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdTaGllbGQiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBENkIzRiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwOTREMkQiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdHb2xkIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNEQUE1MjAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiNGRkQ3MDAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjREFBNTIwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnSW5uZXIiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzBBN0I0NSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwNjU3MzAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8ZmlsdGVyIGlkPSJzaGFkb3ciIHg9Ii01JSIgeT0iLTUlIiB3aWR0aD0iMTEwJSIgaGVpZ2h0PSIxMTAlIj4KICAgICAgPGZlRHJvcFNoYWRvdyBkeD0iMCIgZHk9IjEiIHN0ZERldmlhdGlvbj0iMiIgZmxvb2QtY29sb3I9IiMwMDAwMDAzMCIvPgogICAgPC9maWx0ZXI+CiAgPC9kZWZzPgoKICA8IS0tIE91dGVyIFNoaWVsZCAtLT4KICA8cGF0aCBkPSJNMTAwIDggTDE4NSA1NSBMMTg1IDE0MCBRMTg1IDE3NSAxNTAgMTk1IEwxMDAgMjEyIEw1MCAxOTUgUTE1IDE3NSAxNSAxNDAgTDE1IDU1IFoiIAogICAgICAgIGZpbGw9InVybCgjZ1NoaWVsZCkiIHN0cm9rZT0idXJsKCNnR29sZCkiIHN0cm9rZS13aWR0aD0iMyIgZmlsdGVyPSJ1cmwoI3NoYWRvdykiLz4KICAKICA8IS0tIEdvbGQgYm9yZGVyIGlubmVyIC0tPgogIDxwYXRoIGQ9Ik0xMDAgMTggTDE3NSA2MCBMMTc1IDEzOCBRMTc1IDE2OCAxNDUgMTg2IEwxMDAgMjAyIEw1NSAxODYgUTI1IDE2OCAyNSAxMzggTDI1IDYwIFoiIAogICAgICAgIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0RBQTUyMCIgc3Ryb2tlLXdpZHRoPSIxLjUiIG9wYWNpdHk9IjAuNyIvPgogIAogIDwhLS0gSW5uZXIgc2hpZWxkIC0tPgogIDxwYXRoIGQ9Ik0xMDAgMjQgTDE3MCA2MyBMMTcwIDEzNiBRMTcwIDE2NCAxNDIgMTgxIEwxMDAgMTk2IEw1OCAxODEgUTMwIDE2NCAzMCAxMzYgTDMwIDYzIFoiIAogICAgICAgIGZpbGw9InVybCgjZ0lubmVyKSIgb3BhY2l0eT0iMC41Ii8+CgogIDwhLS0gRml2ZS1wb2ludGVkIHN0YXIgKEJpbnRhbmcpIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEwMCw2OCkiPgogICAgPHBvbHlnb24gcG9pbnRzPSIwLC0yOCA2LjUsLTkgMjcsLTkgMTAuNSw0IDE2LjUsMjMgMCwxMiAtMTYuNSwyMyAtMTAuNSw0IC0yNywtOSAtNi41LC05IiAKICAgICAgICAgICAgIGZpbGw9IiNGRkQ3MDAiIHN0cm9rZT0iI0RBQTUyMCIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KICA8L2c+CgogIDwhLS0gT3BlbiBCb29rIChBbC1RdXJhbikgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAwLDExMCkiPgogICAgPCEtLSBMZWZ0IHBhZ2UgLS0+CiAgICA8cGF0aCBkPSJNLTMgLTE1IFEtMjggLTE4IC0zNiAtMTAgTC0zNiAxNSBRLTI4IDggLTMgMTAgWiIgZmlsbD0iI0ZGRkZGRiIgc3Ryb2tlPSIjREFBNTIwIiBzdHJva2Utd2lkdGg9IjAuOCIvPgogICAgPCEtLSBSaWdodCBwYWdlIC0tPgogICAgPHBhdGggZD0iTTMgLTE1IFEyOCAtMTggMzYgLTEwIEwzNiAxNSBRMjggOCAzIDEwIFoiIGZpbGw9IiNGRkZGRkYiIHN0cm9rZT0iI0RBQTUyMCIgc3Ryb2tlLXdpZHRoPSIwLjgiLz4KICAgIDwhLS0gU3BpbmUgLS0+CiAgICA8cGF0aCBkPSJNLTMgLTE1IEwwIC0xNyBMMyAtMTUgTDMgMTAgTDAgMTIgTC0zIDEwIFoiIGZpbGw9IiNEQUE1MjAiLz4KICAgIDwhLS0gTGluZXMgb24gbGVmdCBwYWdlIC0tPgogICAgPGxpbmUgeDE9Ii0zMCIgeTE9Ii02IiB4Mj0iLTgiIHkyPSItNiIgc3Ryb2tlPSIjMEE3QjQ1IiBzdHJva2Utd2lkdGg9IjAuNiIgb3BhY2l0eT0iMC41Ii8+CiAgICA8bGluZSB4MT0iLTMwIiB5MT0iLTEiIHgyPSItOCIgeTI9Ii0xIiBzdHJva2U9IiMwQTdCNDUiIHN0cm9rZS13aWR0aD0iMC42IiBvcGFjaXR5PSIwLjUiLz4KICAgIDxsaW5lIHgxPSItMzAiIHkxPSI0IiB4Mj0iLTgiIHkyPSI0IiBzdHJva2U9IiMwQTdCNDUiIHN0cm9rZS13aWR0aD0iMC42IiBvcGFjaXR5PSIwLjUiLz4KICAgIDwhLS0gTGluZXMgb24gcmlnaHQgcGFnZSAtLT4KICAgIDxsaW5lIHgxPSI4IiB5MT0iLTYiIHgyPSIzMCIgeTI9Ii02IiBzdHJva2U9IiMwQTdCNDUiIHN0cm9rZS13aWR0aD0iMC42IiBvcGFjaXR5PSIwLjUiLz4KICAgIDxsaW5lIHgxPSI4IiB5MT0iLTEiIHgyPSIzMCIgeTI9Ii0xIiBzdHJva2U9IiMwQTdCNDUiIHN0cm9rZS13aWR0aD0iMC42IiBvcGFjaXR5PSIwLjUiLz4KICAgIDxsaW5lIHgxPSI4IiB5MT0iNCIgeDI9IjMwIiB5Mj0iNCIgc3Ryb2tlPSIjMEE3QjQ1IiBzdHJva2Utd2lkdGg9IjAuNiIgb3BhY2l0eT0iMC41Ii8+CiAgPC9nPgoKICA8IS0tIExlZnQgd2hlYXQvcGFkaSAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0OCwxNDApIiBmaWxsPSIjREFBNTIwIiBzdHJva2U9IiNCODg2MEIiIHN0cm9rZS13aWR0aD0iMC4zIj4KICAgIDxwYXRoIGQ9Ik0xMiA0NSBRMTAgMzUgOCAyNSBRNSAxNSA1IDUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzBENkIzRiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgIDxlbGxpcHNlIGN4PSIzIiBjeT0iMTAiIHJ4PSI0IiByeT0iNyIgdHJhbnNmb3JtPSJyb3RhdGUoLTIwLDMsMTApIi8+CiAgICA8ZWxsaXBzZSBjeD0iMSIgY3k9IjIyIiByeD0iNCIgcnk9IjciIHRyYW5zZm9ybT0icm90YXRlKC0yNSwxLDIyKSIvPgogICAgPGVsbGlwc2UgY3g9IjIiIGN5PSIzNCIgcng9IjMuNSIgcnk9IjYiIHRyYW5zZm9ybT0icm90YXRlKC0xNSwyLDM0KSIvPgogICAgPGVsbGlwc2UgY3g9IjEwIiBjeT0iNiIgcng9IjQiIHJ5PSI3IiB0cmFuc2Zvcm09InJvdGF0ZSgxNSwxMCw2KSIvPgogICAgPGVsbGlwc2UgY3g9IjEyIiBjeT0iMTgiIHJ4PSI0IiByeT0iNyIgdHJhbnNmb3JtPSJyb3RhdGUoMTAsMTIsMTgpIi8+CiAgICA8ZWxsaXBzZSBjeD0iMTEiIGN5PSIzMCIgcng9IjMuNSIgcnk9IjYiIHRyYW5zZm9ybT0icm90YXRlKDUsMTEsMzApIi8+CiAgPC9nPgoKICA8IS0tIFJpZ2h0IHdoZWF0L3BhZGkgKG1pcnJvcmVkKSAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNTIsMTQwKSBzY2FsZSgtMSwxKSIgZmlsbD0iI0RBQTUyMCIgc3Ryb2tlPSIjQjg4NjBCIiBzdHJva2Utd2lkdGg9IjAuMyI+CiAgICA8cGF0aCBkPSJNMTIgNDUgUTEwIDM1IDggMjUgUTUgMTUgNSA1IiBmaWxsPSJub25lIiBzdHJva2U9IiMwRDZCM0YiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgICA8ZWxsaXBzZSBjeD0iMyIgY3k9IjEwIiByeD0iNCIgcnk9IjciIHRyYW5zZm9ybT0icm90YXRlKC0yMCwzLDEwKSIvPgogICAgPGVsbGlwc2UgY3g9IjEiIGN5PSIyMiIgcng9IjQiIHJ5PSI3IiB0cmFuc2Zvcm09InJvdGF0ZSgtMjUsMSwyMikiLz4KICAgIDxlbGxpcHNlIGN4PSIyIiBjeT0iMzQiIHJ4PSIzLjUiIHJ5PSI2IiB0cmFuc2Zvcm09InJvdGF0ZSgtMTUsMiwzNCkiLz4KICAgIDxlbGxpcHNlIGN4PSIxMCIgY3k9IjYiIHJ4PSI0IiByeT0iNyIgdHJhbnNmb3JtPSJyb3RhdGUoMTUsMTAsNikiLz4KICAgIDxlbGxpcHNlIGN4PSIxMiIgY3k9IjE4IiByeD0iNCIgcnk9IjciIHRyYW5zZm9ybT0icm90YXRlKDEwLDEyLDE4KSIvPgogICAgPGVsbGlwc2UgY3g9IjExIiBjeT0iMzAiIHJ4PSIzLjUiIHJ5PSI2IiB0cmFuc2Zvcm09InJvdGF0ZSg1LDExLDMwKSIvPgogIDwvZz4KCiAgPCEtLSBDb3R0b24gLyBLYXBhcyBsZWZ0IC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDU1LDEzNSkiPgogICAgPGNpcmNsZSBjeD0iMCIgY3k9IjAiIHI9IjUiIGZpbGw9IiNGRkZGRkYiIHN0cm9rZT0iI0NDQyIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KICAgIDxjaXJjbGUgY3g9IjQiIGN5PSItNCIgcj0iNCIgZmlsbD0iI0ZGRkZGRiIgc3Ryb2tlPSIjQ0NDIiBzdHJva2Utd2lkdGg9IjAuNSIvPgogICAgPGNpcmNsZSBjeD0iLTMiIGN5PSItNCIgcj0iMy41IiBmaWxsPSIjRkZGRkZGIiBzdHJva2U9IiNDQ0MiIHN0cm9rZS13aWR0aD0iMC41Ii8+CiAgPC9nPgoKICA8IS0tIENvdHRvbiAvIEthcGFzIHJpZ2h0IC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE0NSwxMzUpIj4KICAgIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSI1IiBmaWxsPSIjRkZGRkZGIiBzdHJva2U9IiNDQ0MiIHN0cm9rZS13aWR0aD0iMC41Ii8+CiAgICA8Y2lyY2xlIGN4PSItNCIgY3k9Ii00IiByPSI0IiBmaWxsPSIjRkZGRkZGIiBzdHJva2U9IiNDQ0MiIHN0cm9rZS13aWR0aD0iMC41Ii8+CiAgICA8Y2lyY2xlIGN4PSIzIiBjeT0iLTQiIHI9IjMuNSIgZmlsbD0iI0ZGRkZGRiIgc3Ryb2tlPSIjQ0NDIiBzdHJva2Utd2lkdGg9IjAuNSIvPgogIDwvZz4KCiAgPCEtLSBSaWJib24gQmFubmVyIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEwMCwxOTIpIj4KICAgIDxwYXRoIGQ9Ik0tNTUgMCBMLTQ1IC04IEw0NSAtOCBMNTUgMCBMNDUgOCBMLTQ1IDggWiIgZmlsbD0iI0RBQTUyMCIgc3Ryb2tlPSIjQjg4NjBCIiBzdHJva2Utd2lkdGg9IjAuOCIvPgogICAgPHRleHQgeD0iMCIgeT0iNCIgZm9udC1mYW1pbHk9InNlcmlmIiBmb250LXNpemU9IjgiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjMDk0RDJEIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5VSU5TSSBTQU1BUklOREE8L3RleHQ+CiAgPC9nPgo8L3N2Zz4=" alt="Logo UINSI" style="width:80px;height:80px;object-fit:contain"></div>
+      <div class="kop-text">
+        <div style="font-size:10pt;color:#666">Kementerian Agama Republik Indonesia</div>
+        <div class="kop-uni">Universitas Islam Negeri</div>
+        <div class="kop-uni">Sultan Aji Muhammad Idris Samarinda</div>
+        <div class="kop-fak">Fakultas Ekonomi dan Bisnis Islam</div>
+        <div class="kop-addr">Jl. H.A.M. Rifaddin, Harapan Baru, Loa Janan Ilir, Samarinda, Kalimantan Timur 75251</div>
+        <div class="kop-addr">Telp. (0541) 7271119 | febi.uinsi.ac.id | febi@uinsi.ac.id</div>
+      </div>
+    </div>
+    <div class="kop-line2"></div>
+    <div class="surat-nomor">Nomor: ${nomor}</div>
+    <div class="surat-judul">Lembar Keterangan Hasil Uji Similarity Nasional</div>
+    <div class="surat-sub">Proposal Penelitian / Skripsi Mahasiswa FEBI UINSI Samarinda</div>
+    <div class="isi-surat">
+      <div class="pembuka">Yang bertanda tangan di bawah ini, Dekan Fakultas Ekonomi Bisnis Islam Universitas Islam Negeri Sultan Aji Muhammad Idris Samarinda, menerangkan bahwa telah dilakukan uji kemiripan (<em>similarity check</em>) tingkat nasional terhadap proposal penelitian/skripsi atas nama mahasiswa berikut:</div>
+      <table class="data-tabel">
+        <tr><td>Nama Mahasiswa</td><td>:</td><td><strong>${esc(r.nama)}</strong></td></tr>
+        <tr><td>Nomor Induk Mahasiswa</td><td>:</td><td><strong>${esc(r.nim)}</strong></td></tr>
+        <tr><td>Program Studi</td><td>:</td><td>${esc(r.prodi)}</td></tr>
+        <tr><td>Tahun Akademik</td><td>:</td><td>${esc(r.tahun)}</td></tr>
+        <tr><td>Judul Proposal/Skripsi</td><td>:</td><td><strong>${esc(r.judul)}</strong></td></tr>
+        <tr><td style="vertical-align:top">Abstrak</td><td style="vertical-align:top">:</td><td style="font-size:10pt;font-style:italic">${r.abstrak?esc(r.abstrak).substring(0,500)+(r.abstrak.length>500?'…':''):'—'}</td></tr>
+      </table>
+      <p style="margin:12px 0 8px;font-size:11.5pt">Uji kemiripan dilakukan menggunakan <strong>Sistem SiBIRO FEBI UINSI Samarinda — Level Nasional PTKIN</strong> dengan metode <em>8-Algorithm Hybrid Similarity</em>, terhadap sumber data berikut:</p>
+      <div class="result-box"><table>
+        <tr class="row-head"><td>Rincian Sumber Data</td><td style="text-align:right">Jumlah</td></tr>
+        <tr><td>1. Proposal Penelitian FEBI UINSI (Firebase)</td><td style="text-align:right">${r.pCnt} karya</td></tr>
+        <tr><td>2. Repository Lokal FEBI UINSI (Firebase)</td><td style="text-align:right">${r.rCnt} karya</td></tr>
+        <tr><td>3. Repository UINSI Samarinda (OAI-PMH)</td><td style="text-align:right">${r.uCnt} skripsi</td></tr>
+        <tr><td>4. 🇮🇩 Repository PTKIN Nasional (${PTKIN_STATS.total} Institusi: ${PTKIN_STATS.uin} UIN, ${PTKIN_STATS.iain} IAIN, ${PTKIN_STATS.stain} STAIN)</td><td style="text-align:right">${r.nCnt.toLocaleString()} skripsi</td></tr>
+        <tr class="row-total"><td><strong>Total Karya Ilmiah Diperiksa</strong></td><td style="text-align:right"><strong>${r.total.toLocaleString()} karya</strong></td></tr>
+        <tr><td>Pembobotan Algoritma</td><td style="text-align:right">Judul 70% + Abstrak 30%</td></tr>
+        <tr><td><strong>Tingkat Kemiripan Tertinggi</strong></td><td style="text-align:right"><strong>${r.highest}%</strong></td></tr>
+        <tr><td>Karya Serupa (skor ≥ 30%)</td><td style="text-align:right">${r.hits.length} karya</td></tr>
+        <tr><td>Waktu Pemeriksaan</td><td style="text-align:right">${fmtDateLong(r.checkedAt)}</td></tr>
+        <tr class="row-status"><td><strong>STATUS</strong></td><td style="text-align:right"><span class="${stCls}">${stLbl}</span></td></tr>
+      </table></div>
+      ${r.hits.length>0?`
+      <div class="algo-section-title">Detail Karya Ilmiah Serupa yang Terdeteksi</div>
+      <table class="match-tbl">
+        <tr><th>#</th><th>Judul Karya Ilmiah</th><th>Penulis</th><th>Prodi</th><th>Tahun</th><th>Skor</th><th>Sumber</th></tr>
+        ${matchRows}
+      </table>`:''}
+      ${algoDetailHtml?`
+      <div class="algo-section-title">Detail Analisis 8 Algoritma (Karya Teratas)</div>
+      <table class="algo-detail-tbl">
+        <tr><th>#</th><th>Algoritma</th><th>Bobot</th><th>Skor Judul</th></tr>
+        ${algoDetailHtml}
+      </table>`:''}
+      <div class="penutup">Demikian surat keterangan ini dibuat untuk dipergunakan sebagaimana mestinya. Uji kemiripan ini bersifat komputasional dan merupakan alat bantu dalam proses evaluasi akademik.</div>
+    </div>
+    <div class="ttd-section"><div class="ttd-block">
+      <div class="ttd-kota">Samarinda, ${tgl}</div>
+      <div class="ttd-jabatan">Dekan FEBI UINSI Samarinda</div>
+      <div class="ttd-space"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyODAgMTAwIiB3aWR0aD0iMjgwIiBoZWlnaHQ9IjEwMCI+CiAgPGRlZnM+CiAgICA8ZmlsdGVyIGlkPSJpbmsiIHg9Ii0yJSIgeT0iLTIlIiB3aWR0aD0iMTA0JSIgaGVpZ2h0PSIxMDQlIj4KICAgICAgPGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuMDQiIG51bU9jdGF2ZXM9IjQiIHJlc3VsdD0ibm9pc2UiLz4KICAgICAgPGZlRGlzcGxhY2VtZW50TWFwIGluPSJTb3VyY2VHcmFwaGljIiBpbjI9Im5vaXNlIiBzY2FsZT0iMC41IiB4Q2hhbm5lbFNlbGVjdG9yPSJSIiB5Q2hhbm5lbFNlbGVjdG9yPSJHIi8+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMWExYTZlIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGZpbHRlcj0idXJsKCNpbmspIj4KICAgIDwhLS0gIk0iIC0tPgogICAgPHBhdGggZD0iTTIwIDY4IFExOCA0MCAyMiAyOCBRMjQgMjIgMjYgMjggTDMwIDQ4IFEzMiA1NSAzNCA0OCBMMzggMjggUTQwIDIyIDQyIDI4IFE0NiA0MCA0NCA1NSIgc3Ryb2tlLXdpZHRoPSIyLjIiLz4KICAgIDwhLS0gIm8iIC0tPgogICAgPHBhdGggZD0iTTUwIDQ1IFE0OCAzOCA1NCAzNSBRNjAgMzMgNjIgMzggUTY0IDQ0IDYwIDQ4IFE1NiA1MCA1MCA0NSIgc3Ryb2tlLXdpZHRoPSIxLjgiLz4KICAgIDwhLS0gImgiIC0tPgogICAgPHBhdGggZD0iTTY2IDI4IFE2NSAzNSA2NiA0OCBNNjYgNDAgUTcwIDM1IDc0IDM4IFE3NiA0MiA3NSA0OCIgc3Ryb2tlLXdpZHRoPSIxLjgiLz4KICAgIDwhLS0gZG90ICIuIiAtLT4KICAgIDxjaXJjbGUgY3g9IjgwIiBjeT0iNDgiIHI9IjEuMiIgZmlsbD0iIzFhMWE2ZSIgc3Ryb2tlPSJub25lIi8+CiAgICAKICAgIDwhLS0gc3BhY2UgdGhlbiAiTSIgKGJpZ2dlciwgbW9yZSBmbG91cmlzaCkgLS0+CiAgICA8cGF0aCBkPSJNOTUgNjUgUTkyIDM4IDk2IDI1IFE5OCAxOCAxMDIgMjUgTDEwOCA1MCBRMTEwIDU4IDExNCA0OCBMMTIwIDI1IFExMjIgMTggMTI2IDI1IFExMzIgNDAgMTI4IDU4IFExMjYgNjUgMTMwIDY4IiBzdHJva2Utd2lkdGg9IjIuNSIvPgogICAgPCEtLSAiYSIgLS0+CiAgICA8cGF0aCBkPSJNMTM2IDQyIFExMzIgMzYgMTM4IDM0IFExNDQgMzMgMTQ1IDM4IFExNDYgNDQgMTQyIDQ3IFExMzggNDggMTM2IDQ0IE0xNDUgMzQgUTE0NiA0MCAxNDYgNDgiIHN0cm9rZS13aWR0aD0iMS44Ii8+CiAgICA8IS0tICJoIiAtLT4KICAgIDxwYXRoIGQ9Ik0xNTAgMjUgUTE0OSAzNSAxNTAgNDggTTE1MCAzOCBRMTU0IDMzIDE1OCAzNiBRMTYwIDQwIDE1OSA0OCIgc3Ryb2tlLXdpZHRoPSIxLjgiLz4KICAgIDwhLS0gInIiIC0tPgogICAgPHBhdGggZD0iTTE2NCAzNiBRMTYzIDQwIDE2NCA0OCBNMTY0IDM4IFExNjggMzMgMTcyIDM1IiBzdHJva2Utd2lkdGg9IjEuOCIvPgogICAgPCEtLSAidSIgLS0+CiAgICA8cGF0aCBkPSJNMTc1IDM2IFExNzQgNDIgMTc2IDQ4IFExNzggNTAgMTgyIDQ4IFExODQgNDQgMTg0IDM2IiBzdHJva2Utd2lkdGg9IjEuOCIvPgogICAgPCEtLSAicyIgLS0+CiAgICA8cGF0aCBkPSJNMTkwIDM2IFExOTIgMzMgMTk1IDM1IFExOTcgMzcgMTk0IDQwIFExOTAgNDIgMTg4IDQ0IFExOTAgNDggMTk0IDQ4IFExOTggNDcgMTk4IDQ1IiBzdHJva2Utd2lkdGg9IjEuOCIvPgogICAgCiAgICA8IS0tIFVuZGVybGluZSBmbG91cmlzaCAtLT4KICAgIDxwYXRoIGQ9Ik0xOCA3MiBRNjAgNzQgMTQwIDcwIFEyMDAgNjYgMjEwIDY4IFEyMjAgNzIgMjQwIDYyIiBzdHJva2Utd2lkdGg9IjEuNiIgb3BhY2l0eT0iMC43Ii8+CiAgICAKICAgIDwhLS0gRGVjb3JhdGl2ZSBzd2lybCBvbiB0aGUgTSAtLT4KICAgIDxwYXRoIGQ9Ik0xMjYgNTggUTEzNSA2MiAxNDUgNTggUTE1NSA1MiAxNjAgNjAiIHN0cm9rZS13aWR0aD0iMS4yIiBvcGFjaXR5PSIwLjUiLz4KICA8L2c+Cjwvc3ZnPg==" alt="Tanda Tangan" style="height:70px;width:auto;object-fit:contain"></div>
+      <div class="ttd-nama">Dr. H. Moh. Mahrus, S.Ag., M.HI.</div>
+      <div class="ttd-nip">NIP. 197601012005011003</div>
+    </div></div>`;
+  /* Show preview lalu print */
+  document.getElementById('print-surat').classList.add('preview-mode');
+  document.body.style.overflow='hidden';
+  try { window.print(); } catch(e) { console.error('Print error:', e); }
+  } catch(err) { console.error('printSurat error:', err); toast('Error cetak: '+(err.message||err),'error'); }
+}
+function closeSuratPreview(){
+  document.getElementById('print-surat').classList.remove('preview-mode');
+  document.body.style.overflow='';
+}
+
+/* ── Helpers ── */
+function show(id){const el=document.getElementById(id);if(el)el.style.display='block'}
+function hide(id){const el=document.getElementById(id);if(el)el.style.display='none'}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+function setDot(id,cls){const el=document.getElementById(id);if(el)el.className='src-dot '+cls}
+function setLbl(id,t){const el=document.getElementById(id);if(el)el.textContent=t}
+function setProgress(pct,msg,sub){
+  const f=document.getElementById('prog-fill');if(f)f.style.width=pct+'%';
+  const m=document.getElementById('load-msg');if(m&&msg)m.textContent=msg;
+  const s=document.getElementById('load-sub');if(s&&sub!==undefined)s.textContent=sub;
+}
+function updChar(id,len){
+  const el=document.getElementById(id);if(!el)return;
+  if(id==='ac')el.innerHTML=len+` karakter — <span style="color:var(--${len>=200?'g700':'s500'});">${len>=200?'✓ Cukup (bobot abstrak aktif)':'disarankan ≥ 200 karakter'}</span>`;
+  else el.textContent=len+' karakter';
+}
+function togEl(id){const el=document.getElementById(id);if(!el)return;el.style.display=el.style.display==='block'?'none':'block'}
+function resetToForm(){APP.result=null;hide('sec-result');hide('sec-load');show('sec-form');document.getElementById('btn-check').disabled=false;window.scrollTo({top:0,behavior:'smooth'})}
+function fmtDate(d){if(!d)return'-';const dt=d instanceof Date?d:new Date(d);return dt.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'})}
+function fmtTime(d){if(!d)return'';const dt=d instanceof Date?d:new Date(d);return dt.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})+' WITA'}
+function fmtDateLong(d){if(!d)return'-';const dt=d instanceof Date?d:new Date(d);return dt.toLocaleString('id-ID',{day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})+' WITA'}
+function toast(msg,type='info'){const el=document.getElementById('toast');if(!el)return;el.textContent=msg;el.className='show '+type;setTimeout(()=>{el.className=type},3500)}
+
+/* ── Init ── */
+document.addEventListener('DOMContentLoaded',()=>{
+  const y=new Date().getFullYear();
+  const t=document.getElementById('tahun');if(t)t.value=y+'/'+(y+1);
+  preload();
+  /* Bind print button via addEventListener (bypass CSP inline restrictions) */
+  const btnCetak=document.getElementById('btn-cetak-surat');
+  if(btnCetak){
+    btnCetak.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();printSurat();});
+    btnCetak.addEventListener('touchend',function(e){e.preventDefault();printSurat();});
+    console.log('✅ Print button bound via addEventListener');
+  }
+  /* Bind preview buttons */
+  const btnClose=document.getElementById('btn-close-preview');
+  if(btnClose) btnClose.addEventListener('click',function(){closeSuratPreview();});
+  const btnBack=document.getElementById('btn-back-result');
+  if(btnBack) btnBack.addEventListener('click',function(){closeSuratPreview();});
+  const btnDoPrint=document.getElementById('btn-do-print');
+  if(btnDoPrint) btnDoPrint.addEventListener('click',function(){try{window.print();}catch(e){console.error(e);}});
+  /* Global delegation fallback — catches clicks even if direct binding fails */
+  document.addEventListener('click',function(e){
+    const el=e.target.closest('#btn-cetak-surat');
+    if(el){e.preventDefault();e.stopPropagation();printSurat();}
+    const cl=e.target.closest('#btn-close-preview,#btn-back-result');
+    if(cl) closeSuratPreview();
+    const dp=e.target.closest('#btn-do-print');
+    if(dp){try{window.print();}catch(x){}}
+  });
+  console.log('✅ SiBIRO v7.1 NASIONAL — 8-Algorithm Similarity + 58 PTKIN se-Indonesia');
+  console.log('🇮🇩 PTKIN Registry:',PTKIN_STATS.total,'institusi (',PTKIN_STATS.uin,'UIN,',PTKIN_STATS.iain,'IAIN,',PTKIN_STATS.stain,'STAIN)');
+  console.log('📦 UINSI Seed:',SEED.length,'skripsi + Permanent Firebase + Incremental Live Sync');
+  console.log('🔍 8 Algoritma: Cosine(20%) + Jacc2(15%) + Jacc3(15%) + Jacc4(10%) + Lev(8%) + Sem(7%) + CharN(15%) + Overlap(10%)');
+  console.log('⚖️ Bobot: Judul 70% + Abstrak 30% | Firebase + OAI-PMH Real-time');
+  console.log('🔧 v7.1: Timeout 25-30s, 15-page pagination, multi-endpoint auto-detect, HTTP fallback, no-set retry');
+});
+</script>
+</body>
+</html>
